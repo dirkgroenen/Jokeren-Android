@@ -4,5 +4,6 @@
     <string name="app_name">Jokeren</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="opp1">Opp. 1</string>
 
 </resources>
