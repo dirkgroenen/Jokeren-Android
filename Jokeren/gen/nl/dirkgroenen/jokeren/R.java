@@ -72,6 +72,7 @@ public final class R {
         public static final int sq=0x7f02003a;
     }
     public static final class id {
+        public static final int bStartGame=0x7f07001a;
         public static final int ivDeck=0x7f070003;
         public static final int ivDeckOpen=0x7f070002;
         public static final int ivcard0_1=0x7f070006;
@@ -97,7 +98,7 @@ public final class R {
         public static final int llplaygroundRow1=0x7f07000e;
         public static final int llplaygroundRow2=0x7f070014;
         public static final int lltopplayers=0x7f070000;
-        public static final int menu_settings=0x7f07001a;
+        public static final int menu_settings=0x7f07001b;
         public static final int tvOpp1=0x7f070001;
     }
     public static final class layout {
