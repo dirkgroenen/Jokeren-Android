@@ -2,6 +2,7 @@ package nl.dirkgroenen.jokeren;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -29,6 +30,8 @@ public class Game extends Activity{
 	}
 	
 	private void nextDeckCard(){
+		Log.i("CARD",deck.peek().getPngName());
 		ivimage.setImageResource(deck.peek().getImageResourceId());
+		deck.pop();
 	}
 }

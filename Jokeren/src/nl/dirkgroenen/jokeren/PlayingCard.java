@@ -18,7 +18,7 @@ public class PlayingCard extends Activity{
     protected static final char TEN = 't';
     //others
     protected static final char JOKER = 'o';
-    protected static final char ACE = '1';
+    protected static final char ACE = 'a';
     protected static final char ACE_AS_FOURTEEN = 'f';
     protected static final char RED_SUITS = 'r';
     protected static final char BLACK_SUITS = 'b';

@@ -1,6 +1,5 @@
 package nl.dirkgroenen.jokeren;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
 
@@ -37,7 +36,7 @@ public class Deck {
 		return cards.peek();
 	}
 	
-	public void pop() throws EmptyDeckException{
+	public void pop(){
 		cards.pop();
 	}
 }
