@@ -11,8 +11,8 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int bred=0x7f020000;
-        public static final int c10=0x7f020001;
+        public static final int bo=0x7f020000;
+        public static final int bred=0x7f020001;
         public static final int c2=0x7f020002;
         public static final int c3=0x7f020003;
         public static final int c4=0x7f020004;
@@ -25,7 +25,7 @@ public final class R {
         public static final int cj=0x7f02000b;
         public static final int ck=0x7f02000c;
         public static final int cq=0x7f02000d;
-        public static final int d10=0x7f02000e;
+        public static final int ct=0x7f02000e;
         public static final int d2=0x7f02000f;
         public static final int d3=0x7f020010;
         public static final int d4=0x7f020011;
@@ -40,7 +40,7 @@ public final class R {
         public static final int dj=0x7f02001a;
         public static final int dk=0x7f02001b;
         public static final int dq=0x7f02001c;
-        public static final int h10=0x7f02001d;
+        public static final int dt=0x7f02001d;
         public static final int h2=0x7f02001e;
         public static final int h3=0x7f02001f;
         public static final int h4=0x7f020020;
@@ -53,11 +53,11 @@ public final class R {
         public static final int hj=0x7f020027;
         public static final int hk=0x7f020028;
         public static final int hq=0x7f020029;
-        public static final int ic_launcher=0x7f02002a;
-        public static final int j=0x7f02002b;
+        public static final int ht=0x7f02002a;
+        public static final int ic_launcher=0x7f02002b;
         public static final int kh=0x7f02002c;
         public static final int qh=0x7f02002d;
-        public static final int s10=0x7f02002e;
+        public static final int ro=0x7f02002e;
         public static final int s2=0x7f02002f;
         public static final int s3=0x7f020030;
         public static final int s4=0x7f020031;
@@ -70,9 +70,10 @@ public final class R {
         public static final int sj=0x7f020038;
         public static final int sk=0x7f020039;
         public static final int sq=0x7f02003a;
+        public static final int st=0x7f02003b;
     }
     public static final class id {
-        public static final int bStartGame=0x7f07001a;
+        public static final int bStartGame=0x7f070033;
         public static final int ivDeck=0x7f070003;
         public static final int ivDeckOpen=0x7f070002;
         public static final int ivcard0_1=0x7f070006;
@@ -82,7 +83,31 @@ public final class R {
         public static final int ivcard0_5=0x7f07000a;
         public static final int ivcard0_6=0x7f07000b;
         public static final int ivcard0_7=0x7f07000c;
+        public static final int ivcard1_1=0x7f07001c;
+        public static final int ivcard1_2=0x7f07001d;
+        public static final int ivcard1_3=0x7f07001e;
+        public static final int ivcard1_4=0x7f07001f;
+        public static final int ivcard1_5=0x7f070020;
+        public static final int ivcard1_6=0x7f070021;
+        public static final int ivcard1_7=0x7f070022;
+        public static final int ivcard2_1=0x7f070024;
+        public static final int ivcard2_2=0x7f070025;
+        public static final int ivcard2_3=0x7f070026;
+        public static final int ivcard2_4=0x7f070027;
+        public static final int ivcard2_5=0x7f070028;
+        public static final int ivcard2_6=0x7f070029;
+        public static final int ivcard2_7=0x7f07002a;
+        public static final int ivcard3_1=0x7f07002c;
+        public static final int ivcard3_2=0x7f07002d;
+        public static final int ivcard3_3=0x7f07002e;
+        public static final int ivcard3_4=0x7f07002f;
+        public static final int ivcard3_5=0x7f070030;
+        public static final int ivcard3_6=0x7f070031;
+        public static final int ivcard3_7=0x7f070032;
         public static final int llCardDeck=0x7f070005;
+        public static final int llCardsOpp1=0x7f07001b;
+        public static final int llCardsOpp2=0x7f070023;
+        public static final int llCardsOpp3=0x7f07002b;
         public static final int llbottomcards=0x7f070004;
         public static final int llplayground=0x7f07000d;
         public static final int llplaygroundColumn1_1=0x7f07000f;
@@ -97,8 +122,9 @@ public final class R {
         public static final int llplaygroundColumn2_5=0x7f070019;
         public static final int llplaygroundRow1=0x7f07000e;
         public static final int llplaygroundRow2=0x7f070014;
+        public static final int lltopcards=0x7f07001a;
         public static final int lltopplayers=0x7f070000;
-        public static final int menu_settings=0x7f07001b;
+        public static final int menu_settings=0x7f070034;
         public static final int tvOpp1=0x7f070001;
     }
     public static final class layout {
