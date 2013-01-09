@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 public class Game extends Activity{
 
@@ -29,7 +30,7 @@ public class Game extends Activity{
 		
 		ivDeckOpen = (ImageView) findViewById(R.id.ivDeckOpen);
 		ivDeckClosed = (ImageView) findViewById(R.id.ivDeck);
-		ivGrabbedCard = (ImageView) findViewById(R.id.ivGrabbedCard);
+		ivGrabbedCard = (ImageView) findViewById(R.id.ivgrabbedcard);
 		
 		//Player's cards
 		llPlayerHand = (LinearLayout) findViewById(R.id.llbottomcards);
@@ -40,30 +41,36 @@ public class Game extends Activity{
 		ivPlayerCard5 = (ImageView) findViewById(R.id.ivcard0_5);
 		ivPlayerCard6 = (ImageView) findViewById(R.id.ivcard0_6);
 		ivPlayerCard7 = (ImageView) findViewById(R.id.ivcard0_7);
-		playerCards = new ImageView[] {ivPlayerCard1,ivPlayerCard2,ivPlayerCard3,ivPlayerCard4,ivPlayerCard5,ivPlayerCard6,ivPlayerCard7};
+		playerCards = new ImageView[] {ivPlayerCard1,ivPlayerCard2,ivPlayerCard3,ivPlayerCard4,ivPlayerCard5,ivPlayerCard6,ivPlayerCard7,ivGrabbedCard};
 		
 		//Create array with players and their hand
 		playersInOrder = new ArrayList<Hand>();
 		playerHand = new Hand(playerCards,"Player name");
 		playersInOrder.add(playerHand);
 		oppHand = new Hand(null,"Opponent");
-		playersInOrder.add(oppHand);
-		
-		// Push all data to gamedata class
-		gameData.init(playerHand,oppHand,playersInOrder);		
-		
+		playersInOrder.add(oppHand);		
 		
 		ivDeckOpen.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
-				grabOpenDeckCard();
+				if(!gameData.getGrabbedCard()){
+					grabOpenDeckCard();
+				}
+				else{
+					Toast.makeText(getApplicationContext(), getResources().getString(R.string.grabbedCardError), Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 		
 		ivDeckClosed.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
-				grabClosedDeckCard();
+				if(!gameData.getGrabbedCard()){
+					grabClosedDeckCard();
+				}
+				else{
+					Toast.makeText(getApplicationContext(), getResources().getString(R.string.grabbedCardError), Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 		
@@ -76,7 +83,6 @@ public class Game extends Activity{
 				public void onClick(View arg0) {
 					markPlayerCardSelected(finalIndex);
 				}
-				
 			});
 		}
 	}
@@ -89,21 +95,26 @@ public class Game extends Activity{
 	
 
 	private void startGame(){
-		// Give cards to players
+		// Push all data to gamedata class
+		gameData.init(playerHand,oppHand,playersInOrder,deck);	
+		gameData.setGameInProgress(true);
+		
+		// Deal cards to players
 		dealCards();
+		
 	}
 	
 	private void dealCards(){
 		for(int c = 0;c < 7;c++){
 			for(Hand hand : playersInOrder){
-				PlayingCard card = deck.getNextCard();
+				PlayingCard card = gameData.getDeck().getNextCard();
 				hand.addCard(card);
 				playerCards[c].setImageResource(card.getImageResourceId());
 			}
 		}
 		
 		// Open top deck card (aka, peek)
-		ivDeckOpen.setImageResource(deck.getNextCard().getImageResourceId());
+		ivDeckOpen.setImageResource(gameData.getDeck().openTopCard().getImageResourceId());
 		ivDeckOpen.setVisibility(View.VISIBLE);
 	}
 	
@@ -121,11 +132,32 @@ public class Game extends Activity{
 		gameData.getPlayerHand().changeCardSelectedState(cardIndex);
 	}
 	
+	// Grab a card from the open stack
 	private void grabOpenDeckCard(){
+		ivGrabbedCard.setVisibility(View.VISIBLE);
+		gameData.setGrabbedCard(true);
 		
+		PlayingCard card = gameData.getDeck().getTopThrownCard();
+		
+		if(gameData.getDeck().getThrownDeckSize() < 2){
+			ivDeckOpen.setVisibility(View.INVISIBLE);
+		}
+		else{
+			ivDeckOpen.setVisibility(View.VISIBLE);
+		}
+		
+		gameData.getPlayerHand().addCard(card);
+		ivGrabbedCard.setImageResource(card.getImageResourceId());
 	}
 	
+	// Grab a card from the open stack
 	private void grabClosedDeckCard(){
+		ivGrabbedCard.setVisibility(View.VISIBLE);
+		gameData.setGrabbedCard(true);
 		
+		PlayingCard card = gameData.getDeck().getNextCard();
+		
+		gameData.getPlayerHand().addCard(card);
+		ivGrabbedCard.setImageResource(card.getImageResourceId());
 	}
 }

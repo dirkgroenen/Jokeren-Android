@@ -1,6 +1,5 @@
 package nl.dirkgroenen.jokeren;
 
-import android.util.Log;
 import android.widget.ImageView;
 
 public class Hand {
@@ -9,7 +8,7 @@ public class Hand {
 	private int firstFreeLocation;
 
 	public Hand(ImageView[] playerCards, String name){
-		this.cards = new PlayingCard[7];
+		this.cards = new PlayingCard[8];
 		firstFreeLocation = 0;
 	}
 

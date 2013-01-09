@@ -5,5 +5,5 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="opp1">Opp. 1</string>
-
+	<string name="grabbedCardError">You have already grabbed a card.</string>
 </resources>

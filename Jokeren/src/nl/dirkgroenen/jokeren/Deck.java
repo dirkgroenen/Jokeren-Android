@@ -5,10 +5,7 @@ import java.util.Stack;
 
 import android.util.Log;
 
-public class Deck {
-	// The maximum cards allowed in the deck, including two jokers
-	private static final int MAX_CARDS = 54;
-	
+public class Deck {	
 	//PlayingCard collection
 	protected Stack<PlayingCard> cards = new Stack<PlayingCard>();
 	protected Stack<PlayingCard> throwncards = new Stack<PlayingCard>();
@@ -41,11 +38,6 @@ public class Deck {
 		return cards.peek();
 	}
 	
-	public void pop(){
-		throwncards.add(peek());
-		cards.pop();
-	}
-	
 	public void getThrownCards(){
 		// Puts all the throwncards in the new deck and shuffle them
 		cards.addAll(throwncards);
@@ -61,6 +53,29 @@ public class Deck {
 		}
 		PlayingCard card = cards.peek();
 		cards.pop();
+		return card;
+	}
+	
+	public PlayingCard openTopCard(){
+		Log.i("DECK", "Cards: "+throwncards.size());
+		PlayingCard card = cards.peek();
+		throwncards.add(peek());
+		cards.pop();
+		Log.i("DECK", "Cards: "+throwncards.size());
+		return card;
+	}
+	
+	public int getThrownDeckSize(){
+		return throwncards.size();
+	}
+	
+	public int getThrownCardsCount(){
+		return throwncards.size();
+	}
+	
+	public PlayingCard getTopThrownCard(){
+		PlayingCard card =  throwncards.peek();
+		throwncards.pop();
 		return card;
 	}
 }
