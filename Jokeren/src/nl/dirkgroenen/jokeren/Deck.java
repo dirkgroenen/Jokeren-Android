@@ -11,6 +11,7 @@ public class Deck {
 	
 	//PlayingCard collection
 	protected Stack<PlayingCard> cards = new Stack<PlayingCard>();
+	protected Stack<PlayingCard> throwncards = new Stack<PlayingCard>();
 	
 	private static final char[] suits = {PlayingCard.DIAMOND,PlayingCard.CLUBS,PlayingCard.HEARTS,PlayingCard.SPADES};
 	private static final char[] values = {PlayingCard.ACE,'2','3','4','5','6','7','8','9',PlayingCard.TEN,PlayingCard.JACK,PlayingCard.QUEEN,PlayingCard.KING};
@@ -32,11 +33,34 @@ public class Deck {
 		Collections.shuffle(cards);
 	}
 	
+	public int size(){
+		return cards.size();
+	}
+	
 	public PlayingCard peek(){
 		return cards.peek();
 	}
 	
 	public void pop(){
+		throwncards.add(peek());
 		cards.pop();
+	}
+	
+	public void getThrownCards(){
+		// Puts all the throwncards in the new deck and shuffle them
+		cards.addAll(throwncards);
+		Collections.shuffle(cards);
+		
+		// Clear the throwncards for new usage
+		throwncards.clear();
+	}
+	
+	public PlayingCard getNextCard(){
+		if(cards.size() == 0){
+			getThrownCards();
+		}
+		PlayingCard card = cards.peek();
+		cards.pop();
+		return card;
 	}
 }

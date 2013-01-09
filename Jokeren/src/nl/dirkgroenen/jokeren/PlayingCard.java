@@ -22,13 +22,15 @@ public class PlayingCard extends Activity{
     protected static final char ACE_AS_FOURTEEN = 'f';
     protected static final char RED_SUITS = 'r';
     protected static final char BLACK_SUITS = 'b';
-	
+
+    private boolean selected;
 	private char suit, value;
 	
 	public PlayingCard(char suit, char value) {
 		super();
 		this.suit = suit;
 		this.value = value;
+		this.selected = false;
 	}
 	
 	public char getValue(){
@@ -36,6 +38,13 @@ public class PlayingCard extends Activity{
 	}
 	public char getSuit(){
 		return suit;
+	}
+	
+	public boolean getSelected(){
+		return selected;
+	}
+	public void setSelected(boolean selected){
+		this.selected = selected;
 	}
 	
 	public String getPngName(){

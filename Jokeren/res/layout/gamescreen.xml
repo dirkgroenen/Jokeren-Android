@@ -35,14 +35,14 @@
 	        android:layout_marginTop="4dp" >
 	        
 			<ImageView 
-	            android:layout_height="70dp"
+	            android:layout_height="70px"
 	            android:layout_width="80dp"
 	            android:id="@+id/ivDeckOpen" 
 				android:src="@drawable/bred"
 				android:layout_marginBottom="5dp" />
 			
 			<ImageView 
-	            android:layout_height="70dp"
+	            android:layout_height="70px"
 	            android:layout_width="80dp"
 	            android:id="@+id/ivDeck" 
 				android:src="@drawable/deckred" />
@@ -83,7 +83,7 @@
 	            <ImageView
 	                android:id="@+id/ivcard0_1"
 	                android:layout_width="wrap_content"
-	                android:layout_height="70dp"
+	                android:layout_height="70px"
 	                android:layout_gravity="bottom"
 	                android:layout_weight="1"
 	                android:paddingRight="2dp"
@@ -92,7 +92,7 @@
 	            <ImageView
 	                android:id="@+id/ivcard0_2"
 	                android:layout_width="wrap_content"
-	                android:layout_height="70dp"
+	                android:layout_height="70px"
 	                android:layout_gravity="bottom"
 	                android:layout_weight="1"
 	                android:paddingRight="2dp"
@@ -101,7 +101,7 @@
 	            <ImageView
 	                android:id="@+id/ivcard0_3"
 	                android:layout_width="wrap_content"
-	                android:layout_height="70dp"
+	                android:layout_height="70px"
 	                android:layout_gravity="bottom"
 	                android:layout_weight="1"
 	                android:paddingRight="2dp"
@@ -110,7 +110,7 @@
 	            <ImageView
 	                android:id="@+id/ivcard0_4"
 	                android:layout_width="wrap_content"
-	                android:layout_height="70dp"
+	                android:layout_height="70px"
 	                android:layout_gravity="bottom"
 	                android:layout_weight="1"
 	                android:paddingRight="2dp"
@@ -119,7 +119,7 @@
 	            <ImageView
 	                android:id="@+id/ivcard0_5"
 	                android:layout_width="wrap_content"
-	                android:layout_height="70dp"
+	                android:layout_height="70px"
 	                android:layout_gravity="bottom"
 	                android:layout_weight="1"
 	                android:paddingRight="2dp"
@@ -128,7 +128,7 @@
 	            <ImageView
 	                android:id="@+id/ivcard0_6"
 	                android:layout_width="wrap_content"
-	                android:layout_height="70dp"
+	                android:layout_height="70px"
 	                android:layout_gravity="bottom"
 	                android:layout_weight="1"
 	                android:paddingRight="2dp"
@@ -137,7 +137,7 @@
 	            <ImageView
 	                android:id="@+id/ivcard0_7"
 	                android:layout_width="wrap_content"
-	                android:layout_height="70dp"
+	                android:layout_height="70px"
 	                android:layout_gravity="bottom"
 	                android:layout_weight="1"
 	                android:src="@drawable/bred" />
@@ -163,7 +163,7 @@
 			        <LinearLayout
 			            android:id="@+id/llplaygroundColumn1_1"
 			            android:layout_width="wrap_content"
-			            android:layout_height="70dp"
+			            android:layout_height="70px"
 			            android:padding="5dp"
 			            android:orientation="horizontal" >
 			        </LinearLayout>
@@ -171,7 +171,7 @@
 			        <LinearLayout
 			            android:id="@+id/llplaygroundColumn1_2"
 			            android:layout_width="wrap_content"
-			            android:layout_height="70dp"
+			            android:layout_height="70px"
 			            android:padding="5dp"
 			            android:orientation="horizontal" >
 			        </LinearLayout>
@@ -179,7 +179,7 @@
 			        <LinearLayout
 			            android:id="@+id/llplaygroundColumn1_3"
 			            android:layout_width="wrap_content"
-			            android:layout_height="70dp"
+			            android:layout_height="70px"
 			            android:padding="5dp"
 			            android:orientation="horizontal" >
 			        </LinearLayout>
@@ -187,7 +187,7 @@
 			        <LinearLayout
 			            android:id="@+id/llplaygroundColumn1_4"
 			            android:layout_width="wrap_content"
-			            android:layout_height="70dp"
+			            android:layout_height="70px"
 			            android:padding="5dp"
 			            android:orientation="horizontal" >
 			        </LinearLayout>
@@ -195,7 +195,7 @@
 			        <LinearLayout
 			            android:id="@+id/llplaygroundColumn1_5"
 			            android:layout_width="wrap_content"
-			            android:layout_height="70dp"
+			            android:layout_height="70px"
 			            android:padding="5dp"
 			            android:orientation="horizontal" >
 			        </LinearLayout>
@@ -212,7 +212,7 @@
 			        <LinearLayout
 			            android:id="@+id/llplaygroundColumn2_1"
 			            android:layout_width="wrap_content"
-			            android:layout_height="70dp"
+			            android:layout_height="70px"
 			            android:padding="5dp"
 			            android:orientation="horizontal" >
 			        </LinearLayout>
@@ -220,7 +220,7 @@
 			        <LinearLayout
 			            android:id="@+id/llplaygroundColumn2_2"
 			            android:layout_width="wrap_content"
-			            android:layout_height="70dp"
+			            android:layout_height="70px"
 			            android:padding="5dp"
 			            android:orientation="horizontal" >
 			        </LinearLayout>
@@ -228,7 +228,7 @@
 			        <LinearLayout
 			            android:id="@+id/llplaygroundColumn2_3"
 			            android:layout_width="wrap_content"
-			            android:layout_height="70dp"
+			            android:layout_height="70px"
 			            android:padding="5dp"
 			            android:orientation="horizontal" >
 			        </LinearLayout>
@@ -236,7 +236,7 @@
 			        <LinearLayout
 			            android:id="@+id/llplaygroundColumn2_4"
 			            android:layout_width="wrap_content"
-			            android:layout_height="70dp"
+			            android:layout_height="70px"
 			            android:padding="5dp"
 			            android:orientation="horizontal" >
 			        </LinearLayout>
@@ -244,7 +244,7 @@
 			        <LinearLayout
 			            android:id="@+id/llplaygroundColumn2_5"
 			            android:layout_width="wrap_content"
-			            android:layout_height="70dp"
+			            android:layout_height="70px"
 			            android:padding="5dp"
 			            android:orientation="horizontal" >
 			        </LinearLayout>
