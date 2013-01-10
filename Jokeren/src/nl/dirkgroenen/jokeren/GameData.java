@@ -5,6 +5,10 @@ import java.util.ArrayList;
 
 public class GameData implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1459220408162838101L;
 	
 	private Hand playerHand, oppHand;
 	private ArrayList<Hand> playersInOrder;
