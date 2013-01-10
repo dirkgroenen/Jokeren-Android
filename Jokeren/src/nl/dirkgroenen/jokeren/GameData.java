@@ -1,14 +1,30 @@
 package nl.dirkgroenen.jokeren;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GameData {
+public class GameData implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private Hand playerHand, oppHand;
 	private ArrayList<Hand> playersInOrder;
 	private Deck deck;
 	private boolean gameInProgress;
 	private boolean grabbedCard;
+	
+	private static GameData instance = new GameData();
+	
+	public GameData(){
+		// Do nothing
+	}
+	
+	public GameData getInstance(){
+		return instance;
+	}
 	
 	public void init(Hand playerHand, Hand oppHand, ArrayList<Hand> playersInOrder, Deck deck) {
 		this.playerHand = playerHand;
