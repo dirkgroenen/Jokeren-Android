@@ -1,11 +1,17 @@
 package nl.dirkgroenen.jokeren;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 
 import android.app.Activity;
 
-public class PlayingCard extends Activity{
+public class PlayingCard extends Activity implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	//suits
     protected static final char HEARTS = 'h';
     protected static final char SPADES = 's';

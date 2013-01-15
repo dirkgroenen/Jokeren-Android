@@ -8,7 +8,7 @@ public class GameData implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1459220408162838101L;
+	private static final long serialVersionUID = -129686676812904301L;	
 	
 	private Hand playerHand, oppHand;
 	private ArrayList<Hand> playersInOrder;
@@ -22,7 +22,7 @@ public class GameData implements Serializable {
 		// Do nothing
 	}
 	
-	public GameData getInstance(){
+	public static GameData getInstance(){
 		return instance;
 	}
 	
@@ -56,5 +56,9 @@ public class GameData implements Serializable {
 
 	public void setGameInProgress(boolean progress) {
 		this.gameInProgress = progress;
+	}
+	
+	public boolean isGameInProgress(){
+		return gameInProgress;
 	}
 }

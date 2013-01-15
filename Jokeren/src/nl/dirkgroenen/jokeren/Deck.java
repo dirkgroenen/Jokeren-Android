@@ -1,11 +1,17 @@
 package nl.dirkgroenen.jokeren;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Stack;
 
 import android.util.Log;
 
-public class Deck {	
+public class Deck implements Serializable{	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	//PlayingCard collection
 	protected Stack<PlayingCard> cards = new Stack<PlayingCard>();
 	protected Stack<PlayingCard> throwncards = new Stack<PlayingCard>();

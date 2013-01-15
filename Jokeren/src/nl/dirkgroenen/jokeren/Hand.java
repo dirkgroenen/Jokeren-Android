@@ -1,8 +1,15 @@
 package nl.dirkgroenen.jokeren;
 
+import java.io.Serializable;
+
 import android.widget.ImageView;
 
-public class Hand {
+public class Hand implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	protected PlayingCard[] cards;
 	private int firstFreeLocation;
