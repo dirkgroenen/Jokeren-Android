@@ -694,12 +694,12 @@
     <LinearLayout
         android:id="@+id/llCardDeck"
         android:layout_width="wrap_content"
-        android:layout_height="80dp"
+        android:layout_height="90dp"
         android:layout_alignParentBottom="true"
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:weightSum="8" >
+        android:weightSum="14" >
 
         <ImageView
             android:id="@+id/ivgrabbedcard"
@@ -708,9 +708,9 @@
             android:layout_gravity="bottom"
             android:layout_weight="1"
             android:paddingRight="2dp"
-            android:visibility="invisible"
-            android:src="@drawable/bred" />
-        
+            android:src="@drawable/bred"
+            android:visibility="invisible" />
+
         <ImageView
             android:id="@+id/ivcard0_1"
             android:layout_width="wrap_content"
@@ -725,6 +725,7 @@
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:layout_gravity="bottom"
+            android:layout_marginLeft="-25dp"
             android:layout_weight="1"
             android:paddingRight="2dp"
             android:src="@drawable/bred" />
@@ -734,6 +735,7 @@
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:layout_gravity="bottom"
+            android:layout_marginLeft="-25dp"
             android:layout_weight="1"
             android:paddingRight="2dp"
             android:src="@drawable/bred" />
@@ -743,6 +745,7 @@
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:layout_gravity="bottom"
+            android:layout_marginLeft="-25dp"
             android:layout_weight="1"
             android:paddingRight="2dp"
             android:src="@drawable/bred" />
@@ -752,6 +755,7 @@
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:layout_gravity="bottom"
+            android:layout_marginLeft="-25dp"
             android:layout_weight="1"
             android:paddingRight="2dp"
             android:src="@drawable/bred" />
@@ -761,6 +765,7 @@
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:layout_gravity="bottom"
+            android:layout_marginLeft="-25dp"
             android:layout_weight="1"
             android:paddingRight="2dp"
             android:src="@drawable/bred" />
@@ -770,6 +775,61 @@
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:layout_gravity="bottom"
+            android:layout_marginLeft="-25dp"
+            android:layout_weight="1"
+            android:src="@drawable/bred" />
+
+        <ImageView
+            android:id="@+id/ivcard0_8"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="-25dp"
+            android:layout_weight="1"
+            android:src="@drawable/bred" />
+
+        <ImageView
+            android:id="@+id/ivcard0_9"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="-25dp"
+            android:layout_weight="1"
+            android:src="@drawable/bred" />
+
+        <ImageView
+            android:id="@+id/ivcard0_10"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="-25dp"
+            android:layout_weight="1"
+            android:src="@drawable/bred" />
+
+        <ImageView
+            android:id="@+id/ivcard0_11"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="-25dp"
+            android:layout_weight="1"
+            android:src="@drawable/bred" />
+
+        <ImageView
+            android:id="@+id/ivcard0_12"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="-25dp"
+            android:layout_weight="1"
+            android:src="@drawable/bred" />
+
+        <ImageView
+            android:id="@+id/ivcard0_13"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="-25dp"
             android:layout_weight="1"
             android:src="@drawable/bred" />
     </LinearLayout>

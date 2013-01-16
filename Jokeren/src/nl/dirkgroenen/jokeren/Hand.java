@@ -15,7 +15,7 @@ public class Hand implements Serializable{
 	private int firstFreeLocation;
 
 	public Hand(ImageView[] playerCards, String name){
-		this.cards = new PlayingCard[8];
+		this.cards = new PlayingCard[14];
 		firstFreeLocation = 0;
 	}
 
@@ -35,6 +35,10 @@ public class Hand implements Serializable{
 		else{
 			cards[cardIndex].setSelected(true);
 		}
+	}
+
+	public PlayingCard getCardByPosition(int index) {
+		return cards[index];
 	}
 
 }
