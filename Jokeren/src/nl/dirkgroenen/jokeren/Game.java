@@ -8,15 +8,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Game extends Activity{
+public class Game extends Activity implements OnTouchListener{
 
 	private Deck deck;
 	private GameData gameData;
@@ -159,6 +161,8 @@ public class Game extends Activity{
 					markPlayerCardSelected(finalIndex);
 				}
 			});
+			
+			card.setOnTouchListener(this);
 		}
 	}
 
@@ -380,8 +384,12 @@ public class Game extends Activity{
 		orderPlayedSets();
 		ArrayList<PlayedSet> playedSets = gameData.getAllPlayedSets();
 		
+		
 		if(((LinearLayout) llPlayGroundRow1).getChildCount() > 0){
 			((LinearLayout) llPlayGroundRow1).removeAllViews();
+		}
+		if(((LinearLayout) llPlayGroundRow2).getChildCount() > 0){
+			((LinearLayout) llPlayGroundRow2).removeAllViews();
 		}
 		
 		for(int k = 0; k < playedSets.size();k++){
@@ -427,5 +435,23 @@ public class Game extends Activity{
 		// Convert DP to PX for margin
 		float density = getApplicationContext().getResources().getDisplayMetrics().density;
 		return Math.round((float) DP * density);
+	}
+
+	
+	@Override
+	public boolean onTouch(View view, MotionEvent event) {
+		// TODO TOUCH drag and drop for cards
+		int eventAction = event.getAction();
+		
+		switch(eventAction){
+		case MotionEvent.ACTION_DOWN: 
+			break;
+		case MotionEvent.ACTION_MOVE:
+			break;
+		case MotionEvent.ACTION_UP: 
+			break;
+		}
+		
+		return false;
 	}
 }
