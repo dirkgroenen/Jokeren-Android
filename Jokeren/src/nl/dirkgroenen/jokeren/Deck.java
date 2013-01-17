@@ -84,4 +84,14 @@ public class Deck implements Serializable{
 		throwncards.pop();
 		return card;
 	}
+	
+	public PlayingCard peekThrownCards(){
+		PlayingCard top = throwncards.peek();
+		return top;
+	}
+	
+	public void addThrownCardToDeck(PlayingCard card){		
+		throwncards.add(card);
+		Log.i("DECK", "Cards: "+throwncards.size());
+	}
 }

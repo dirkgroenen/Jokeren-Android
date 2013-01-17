@@ -34,6 +34,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/llCardDeck"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -284,7 +285,7 @@
 
             <LinearLayout
                 android:id="@+id/llplayground"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
@@ -702,22 +703,11 @@
         android:weightSum="14" >
 
         <ImageView
-            android:id="@+id/ivgrabbedcard"
-            android:layout_width="wrap_content"
-            android:layout_height="70dp"
-            android:layout_gravity="bottom"
-            android:layout_weight="1"
-            android:paddingRight="2dp"
-            android:src="@drawable/bred"
-            android:visibility="invisible" />
-
-        <ImageView
             android:id="@+id/ivcard0_1"
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:layout_gravity="bottom"
             android:layout_weight="1"
-            android:paddingRight="2dp"
             android:src="@drawable/bred" />
 
         <ImageView
@@ -727,7 +717,6 @@
             android:layout_gravity="bottom"
             android:layout_marginLeft="-25dp"
             android:layout_weight="1"
-            android:paddingRight="2dp"
             android:src="@drawable/bred" />
 
         <ImageView
@@ -737,7 +726,6 @@
             android:layout_gravity="bottom"
             android:layout_marginLeft="-25dp"
             android:layout_weight="1"
-            android:paddingRight="2dp"
             android:src="@drawable/bred" />
 
         <ImageView
@@ -747,7 +735,6 @@
             android:layout_gravity="bottom"
             android:layout_marginLeft="-25dp"
             android:layout_weight="1"
-            android:paddingRight="2dp"
             android:src="@drawable/bred" />
 
         <ImageView
@@ -757,7 +744,6 @@
             android:layout_gravity="bottom"
             android:layout_marginLeft="-25dp"
             android:layout_weight="1"
-            android:paddingRight="2dp"
             android:src="@drawable/bred" />
 
         <ImageView
@@ -767,7 +753,6 @@
             android:layout_gravity="bottom"
             android:layout_marginLeft="-25dp"
             android:layout_weight="1"
-            android:paddingRight="2dp"
             android:src="@drawable/bred" />
 
         <ImageView
@@ -832,6 +817,17 @@
             android:layout_marginLeft="-25dp"
             android:layout_weight="1"
             android:src="@drawable/bred" />
+       
+        <ImageView
+            android:id="@+id/ivcard0_14"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:layout_marginLeft="-25dp"
+            android:src="@drawable/bred"
+            android:visibility="invisible" />
+        
     </LinearLayout>
 
 </RelativeLayout>

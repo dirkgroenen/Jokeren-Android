@@ -85,18 +85,19 @@ public final class R {
         public static final int ivDeck=0x7f070003;
         public static final int ivDeckOpen=0x7f070002;
         public static final int ivcard0_1=0x7f070006;
-        public static final int ivcard0_10=0x7f070036;
-        public static final int ivcard0_11=0x7f070037;
-        public static final int ivcard0_12=0x7f070038;
-        public static final int ivcard0_13=0x7f070039;
+        public static final int ivcard0_10=0x7f070035;
+        public static final int ivcard0_11=0x7f070036;
+        public static final int ivcard0_12=0x7f070037;
+        public static final int ivcard0_13=0x7f070038;
+        public static final int ivcard0_14=0x7f070039;
         public static final int ivcard0_2=0x7f070007;
         public static final int ivcard0_3=0x7f070008;
         public static final int ivcard0_4=0x7f070009;
         public static final int ivcard0_5=0x7f07000a;
         public static final int ivcard0_6=0x7f07000b;
         public static final int ivcard0_7=0x7f07000c;
-        public static final int ivcard0_8=0x7f070034;
-        public static final int ivcard0_9=0x7f070035;
+        public static final int ivcard0_8=0x7f070033;
+        public static final int ivcard0_9=0x7f070034;
         public static final int ivcard1_1=0x7f07001c;
         public static final int ivcard1_2=0x7f07001d;
         public static final int ivcard1_3=0x7f07001e;
@@ -118,7 +119,6 @@ public final class R {
         public static final int ivcard3_5=0x7f070030;
         public static final int ivcard3_6=0x7f070031;
         public static final int ivcard3_7=0x7f070032;
-        public static final int ivgrabbedcard=0x7f070033;
         public static final int llCardDeck=0x7f070005;
         public static final int llCardsOpp1=0x7f07001b;
         public static final int llCardsOpp2=0x7f070023;
@@ -151,10 +151,13 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f040000;
+        public static final int grabCardFirstError=0x7f040005;
         public static final int grabbedCardError=0x7f040004;
         public static final int hello_world=0x7f040001;
         public static final int menu_settings=0x7f040002;
         public static final int opp1=0x7f040003;
+        public static final int throwFirstCardError=0x7f040006;
+        public static final int throwOneCardError=0x7f040007;
     }
     public static final class style {
         /** 

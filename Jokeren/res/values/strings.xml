@@ -6,4 +6,7 @@
     <string name="menu_settings">Settings</string>
     <string name="opp1">Opp. 1</string>
 	<string name="grabbedCardError">You have already grabbed a card.</string>
+	<string name="grabCardFirstError">You need to grab a card from the deck first.</string>
+	<string name="throwFirstCardError">You need to throw away a card first.</string>
+	<string name="throwOneCardError">Please throw away one card.</string>
 </resources>
