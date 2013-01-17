@@ -72,16 +72,18 @@ public class Hand implements Serializable{
 			}
 		}
 		
-		if(countSelected > 1 && countSelected != 0){
+		if(countSelected != 1){
 			return null;
 		}
 		else{
+			// Place card temporary in a new variable and mark as unselected. 
 			PlayingCard temp = cards[cardPosition];
+			temp.setSelected(false);
 			cards[cardPosition] = null;
 			
 			compactHand();
 			resetSelected();
-			
+			Log.i("CARD", "Throw card ["+temp.getPngName()+"] to deck.");
 			return temp;
 		}
 	}
@@ -112,4 +114,18 @@ public class Hand implements Serializable{
 		return lastShowedCard;
 	}
 
+	public int getHandSize(){
+		return cards.length;
+	}
+	
+	public int countSelectedCards(){
+		int c = 0;
+		for(int index = 0;index < cards.length;index++){
+			if(cards[index] != null && cards[index].getSelected() == true){
+				c++;
+			}
+		}
+		Log.i("HAND",c+" Cards are selected");
+		return c;
+	}
 }

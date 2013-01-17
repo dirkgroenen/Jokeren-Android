@@ -9,19 +9,22 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class Game extends Activity {
+public class Game extends Activity{
 
 	private Deck deck;
 	private GameData gameData;
 	Hand playerHand, oppHand;
 	private ImageView ivDeckClosed, ivDeckOpen, ivPlayerCard1, ivPlayerCard2,ivPlayerCard3, ivPlayerCard4, ivPlayerCard5, ivPlayerCard6,ivPlayerCard7, ivPlayerCard8, ivPlayerCard9, ivPlayerCard10,ivPlayerCard11, ivPlayerCard12, ivPlayerCard13, ivPlayerCard14;
 	private ImageView[] playerCards;
+	private TextView tvOpp1;
 	private ArrayList<Hand> playersInOrder;
-	private LinearLayout llPlayGround,llCardDeck;
+	private LinearLayout llPlayGround,llPlayGroundRow1,llPlayGroundRow2,llCardDeck;
 	private ArrayList<PlayedSet> playedSets;
 
 	public static enum STATES {
@@ -132,11 +135,14 @@ public class Game extends Activity {
 			@Override
 			public void onClick(View v) {
 				Log.i("CLICK","Play ground clicked");
-				if(gameData.getGrabbedCard()){
-					createNewPlaySet();
+				if(gameData.getPlayerHand().countSelectedCards() < 3){
+					Toast.makeText(	getApplicationContext(),getResources().getString(R.string.emptyNewSetError),Toast.LENGTH_SHORT).show();
+				}
+				else if(!gameData.getGrabbedCard()){
+					Toast.makeText(	getApplicationContext(),getResources().getString(R.string.grabCardFirstError),Toast.LENGTH_SHORT).show();
 				}
 				else{
-					Toast.makeText(	getApplicationContext(),getResources().getString(R.string.grabCardFirstError),Toast.LENGTH_SHORT).show();
+					createNewPlaySet();
 				}
 				
 			}
@@ -168,6 +174,9 @@ public class Game extends Activity {
 		ivDeckOpen = (ImageView) findViewById(R.id.ivDeckOpen);
 		ivDeckClosed = (ImageView) findViewById(R.id.ivDeck);
 
+		// Opponents textview
+		tvOpp1 = (TextView) findViewById(R.id.tvOpp1);
+		
 		// Player's cards
 		ivPlayerCard1 = (ImageView) findViewById(R.id.ivcard0_1);
 		ivPlayerCard2 = (ImageView) findViewById(R.id.ivcard0_2);
@@ -187,6 +196,8 @@ public class Game extends Activity {
 		
 		// Playground
 		llPlayGround = (LinearLayout) findViewById(R.id.llplayground);
+		llPlayGroundRow1 = (LinearLayout) findViewById(R.id.llplaygroundRow1);
+		llPlayGroundRow2 = (LinearLayout) findViewById(R.id.llplaygroundRow2);
 		
 		//Deck
 		llCardDeck = (LinearLayout) findViewById(R.id.llCardDeck);
@@ -239,8 +250,7 @@ public class Game extends Activity {
 		boolean selected = gameData.getPlayerHand().isCardSelected(cardIndex);
 
 		// Convert DP to PX for margin
-		float density = getApplicationContext().getResources().getDisplayMetrics().density;
-		int leftmargin = (card.getId() != R.id.ivcard0_1) ? -Math.round((float) 25 * density) : 0;
+		int leftmargin = (card.getId() != R.id.ivcard0_1) ? -convertDpToXp(25) : 0;
 
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(card.getLayoutParams().width, card.getLayoutParams().height, 1);
 		params.gravity = !selected ? Gravity.TOP : Gravity.BOTTOM;
@@ -266,6 +276,7 @@ public class Game extends Activity {
 
 		gameData.getPlayerHand().addCard(card);
 		redrawHand();
+		redrawDeck();
 	}
 
 	// Grab a card from the open stack
@@ -303,7 +314,19 @@ public class Game extends Activity {
 			newSet.addCardToSet(card);
 		}
 		gameData.createNewPlaySet(newSet);
-		gameData.setGrabbedCard(false);
+		redrawHand();
+		redrawPlayGround();
+	}
+	
+	// Add cards to played set
+	protected void changePlayedSet(int set) {
+		ArrayList<PlayingCard> setcards = gameData.getPlayerHand().dropSelectedCards();
+		ArrayList<PlayedSet> playedSets = gameData.getAllPlayedSets();
+		PlayedSet newSet = playedSets.get(set);
+		for(PlayingCard card : setcards){
+			newSet.addCardToSet(card);
+		}
+		
 		redrawHand();
 		redrawPlayGround();
 	}
@@ -323,31 +346,78 @@ public class Game extends Activity {
 				playerCards[index].setVisibility(View.VISIBLE);
 				playerCards[index].setImageResource(card.getImageResourceId());
 
-				// Convert DP to PX for margin
-				float density = getApplicationContext().getResources().getDisplayMetrics().density;
-				int leftmargin = (image.getId() != R.id.ivcard0_1) ? -Math.round((float) 25 * density) : 0;
+				// Convert DP to XP				
+				int leftmargin = (image.getId() != R.id.ivcard0_1) ? -convertDpToXp(25) : 0;
 
 				// Make sure that the card is down again
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(image.getLayoutParams().width,	image.getLayoutParams().height, 1);
 				params.gravity = Gravity.BOTTOM;
 				params.setMargins(leftmargin, 0, 0, 0);
 				image.setLayoutParams(params);
+				
+				card.setSelected(false);
 			} else {
 				// Hide because card is empty
 				playerCards[index].setVisibility(View.INVISIBLE);
 			}
 		}
+		
+		// Count the opponents cards and place in textview
+		tvOpp1.setText(getApplicationContext().getResources().getString(R.string.opp1)+": "+Integer.toString(gameData.getOppHand().getHandSize()));
 	}
 
 	private void redrawPlayGround(){
 		//TODO
 		Log.i("REDRAW", "Redraw playground");
+		
+		ArrayList<PlayedSet> playedSets = gameData.getAllPlayedSets();
+		
+		if(((LinearLayout) llPlayGroundRow1).getChildCount() > 0){
+			((LinearLayout) llPlayGroundRow1).removeAllViews();
+		}
+		
+		for(int k = 0; k < playedSets.size();k++){
+			final int currentLL = k;
+			
+			LinearLayout ll = new LinearLayout(getApplicationContext());
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, convertDpToXp(70));
+			params.setMargins(convertDpToXp(5), convertDpToXp(5), convertDpToXp(5), convertDpToXp(5));
+			ll.setLayoutParams(params);
+			for(int i = 0; i < playedSets.get(k).getAllCards().size(); i++){
+				ImageView image = new ImageView(getApplicationContext());
+				
+				LinearLayout.LayoutParams imageparams = new LinearLayout.LayoutParams(convertDpToXp(50),LayoutParams.WRAP_CONTENT, 1);
+				imageparams.gravity = Gravity.BOTTOM;
+				if(i != 0) imageparams.setMargins(-convertDpToXp(35), 0,0,0);
+				image.setLayoutParams(imageparams);
+				
+				image.setImageResource(playedSets.get(k).getAllCards().get(i).getImageResourceId());
+				ll.addView(image);
+			}
+			llPlayGroundRow1.addView(ll);
+			ll.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					changePlayedSet(currentLL);
+				}
+			});
+		}
 	}
-	
+
 	protected void redrawDeck() {
 		// TODO
 		Log.i("REDRAW", "Redraw deck");
-		ivDeckOpen.setImageResource(gameData.getDeck().peekThrownCards().getImageResourceId());
-		ivDeckOpen.setVisibility(View.VISIBLE);
+		Deck deck = gameData.getDeck();
+		
+		if(deck.getThrownDeckSize() != 0){
+			ivDeckOpen.setImageResource(gameData.getDeck().peekThrownCards().getImageResourceId());
+			ivDeckOpen.setVisibility(View.VISIBLE);
+		}
+	}
+	
+	private int convertDpToXp(int DP){
+		// Convert DP to PX for margin
+		float density = getApplicationContext().getResources().getDisplayMetrics().density;
+		return Math.round((float) DP * density);
 	}
 }

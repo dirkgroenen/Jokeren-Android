@@ -14,7 +14,7 @@ public class GameData implements Serializable {
 	private ArrayList<Hand> playersInOrder;
 	private Deck deck;
 	private boolean gameInProgress,grabbedCard,playerMustThrow;
-	private ArrayList<PlayedSet> playedSets;
+	private ArrayList<PlayedSet> playedSets; 
 	
 	private static GameData instance = new GameData();
 	

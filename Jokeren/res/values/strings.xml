@@ -9,4 +9,5 @@
 	<string name="grabCardFirstError">You need to grab a card from the deck first.</string>
 	<string name="throwFirstCardError">You need to throw away a card first.</string>
 	<string name="throwOneCardError">Please throw away one card.</string>
+	<string name="emptyNewSetError">A set contains at least three cards.</string>
 </resources>

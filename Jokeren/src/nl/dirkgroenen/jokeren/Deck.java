@@ -11,6 +11,7 @@ public class Deck implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final int NUM_CARD_PACKS = 2;
 	
 	//PlayingCard collection
 	protected Stack<PlayingCard> cards = new Stack<PlayingCard>();
@@ -22,16 +23,19 @@ public class Deck implements Serializable{
 	
 	// Constructor that will fill the carddeck
 	public Deck(){
-		for(char suit : suits){
-			for(char value : values){
-				cards.add(new PlayingCard(suit, value));
+		for(int i = 0; i < NUM_CARD_PACKS;i++){	
+			for(char suit : suits){
+				for(char value : values){
+					cards.add(new PlayingCard(suit, value));
+				}
 			}
+			
+			//Add two jokers
+			cards.add(new PlayingCard(PlayingCard.RED_SUITS,PlayingCard.JOKER));
+			cards.add(new PlayingCard(PlayingCard.BLACK_SUITS,PlayingCard.JOKER));
+			
 		}
-		
-		//Add two jokers
-		cards.add(new PlayingCard(PlayingCard.RED_SUITS,PlayingCard.JOKER));
-		cards.add(new PlayingCard(PlayingCard.BLACK_SUITS,PlayingCard.JOKER));
-		
+
 		//Shuffle the cards
 		Collections.shuffle(cards);
 	}
@@ -72,10 +76,6 @@ public class Deck implements Serializable{
 	}
 	
 	public int getThrownDeckSize(){
-		return throwncards.size();
-	}
-	
-	public int getThrownCardsCount(){
 		return throwncards.size();
 	}
 	
