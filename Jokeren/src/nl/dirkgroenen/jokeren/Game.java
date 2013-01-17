@@ -1,6 +1,7 @@
 package nl.dirkgroenen.jokeren;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -331,6 +332,13 @@ public class Game extends Activity{
 		redrawPlayGround();
 	}
 	
+	private void orderPlayedSets() {
+		ArrayList<PlayedSet> playedSets = gameData.getAllPlayedSets();
+		for(PlayedSet set : playedSets){
+			Collections.sort(set.getAllCards());
+		}
+	}
+	
 	// ///////////// ////////////////////// ////////////
 	// //////////// REDRAW METHODS /////////////////////
 	// /////////// //////////////////////// ////////////
@@ -367,9 +375,9 @@ public class Game extends Activity{
 	}
 
 	private void redrawPlayGround(){
-		//TODO
 		Log.i("REDRAW", "Redraw playground");
 		
+		orderPlayedSets();
 		ArrayList<PlayedSet> playedSets = gameData.getAllPlayedSets();
 		
 		if(((LinearLayout) llPlayGroundRow1).getChildCount() > 0){

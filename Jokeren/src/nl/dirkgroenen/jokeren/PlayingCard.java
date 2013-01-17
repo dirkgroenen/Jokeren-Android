@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 
 import android.app.Activity;
 
-public class PlayingCard extends Activity implements Serializable{
+public class PlayingCard extends Activity implements Serializable,Comparable<PlayingCard>{
 
 	/**
 	 * 
@@ -42,6 +42,38 @@ public class PlayingCard extends Activity implements Serializable{
 	public char getValue(){
 		return value;
 	}
+	
+	public Integer getIntegerValue(){
+        Integer retVal = Character.getNumericValue(this.value);
+        switch (value) {
+        case TEN:
+                retVal = 10;
+                break;
+        case JACK:
+                retVal = 11;
+                break;
+        case QUEEN:
+                retVal = 12;
+                break;
+        case KING:
+                retVal = 13;
+                break;
+        case JOKER:
+                retVal = null;
+                break;
+        case ACE_AS_FOURTEEN:
+                retVal = 14;
+                break;
+        case ACE:
+        	retVal = 1;
+        	break;
+        default:
+                break;
+        }
+
+        return retVal;
+	}
+	
 	public char getSuit(){
 		return suit;
 	}
@@ -120,5 +152,10 @@ public class PlayingCard extends Activity implements Serializable{
 			break;
 		}
 		return retVal; 
+	}
+
+	@Override
+	public int compareTo(PlayingCard other) {
+		return (other==null? -1 : (other.getIntegerValue() == null ? 0 : other.getIntegerValue()) ) - (this.getIntegerValue()==null? 0: this.getIntegerValue());
 	}
 }
