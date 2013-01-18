@@ -10,4 +10,5 @@
 	<string name="throwFirstCardError">You need to throw away a card first.</string>
 	<string name="throwOneCardError">Please throw away one card.</string>
 	<string name="emptyNewSetError">A set contains at least three cards.</string>
+	<string name="noCardsLeftError">You can\'t place that set since that doesn\'t leave a card to throw on the deck</string>
 </resources>

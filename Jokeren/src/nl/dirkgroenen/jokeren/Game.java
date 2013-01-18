@@ -144,6 +144,9 @@ public class Game extends Activity implements OnTouchListener{
 				else if(!gameData.getGrabbedCard()){
 					Toast.makeText(	getApplicationContext(),getResources().getString(R.string.grabCardFirstError),Toast.LENGTH_SHORT).show();
 				}
+				else if((gameData.getPlayerHand().getCardsCount()-gameData.getPlayerHand().countSelectedCards()) < 1){
+					Toast.makeText(	getApplicationContext(),getResources().getString(R.string.noCardsLeftError),Toast.LENGTH_SHORT).show();
+				}
 				else{
 					createNewPlaySet();
 				}
@@ -325,15 +328,20 @@ public class Game extends Activity implements OnTouchListener{
 	
 	// Add cards to played set
 	protected void changePlayedSet(int set) {
-		ArrayList<PlayingCard> setcards = gameData.getPlayerHand().dropSelectedCards();
-		ArrayList<PlayedSet> playedSets = gameData.getAllPlayedSets();
-		PlayedSet newSet = playedSets.get(set);
-		for(PlayingCard card : setcards){
-			newSet.addCardToSet(card);
+		if((gameData.getPlayerHand().getCardsCount()-gameData.getPlayerHand().countSelectedCards()) == 0){
+			Toast.makeText(	getApplicationContext(),getResources().getString(R.string.noCardsLeftError),Toast.LENGTH_SHORT).show();
 		}
-		
-		redrawHand();
-		redrawPlayGround();
+		else{
+			ArrayList<PlayingCard> setcards = gameData.getPlayerHand().dropSelectedCards();
+			ArrayList<PlayedSet> playedSets = gameData.getAllPlayedSets();
+			PlayedSet newSet = playedSets.get(set);
+			for(PlayingCard card : setcards){
+				newSet.addCardToSet(card);
+			}
+			
+			redrawHand();
+			redrawPlayGround();
+		}
 	}
 	
 	private void orderPlayedSets() {
@@ -453,5 +461,31 @@ public class Game extends Activity implements OnTouchListener{
 		}
 		
 		return false;
+	}
+	
+	///////////////// //////////////// /////////////
+	//////////////// On [..] Handlers /////////////
+	/////////////// ///////////////// ////////////
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		 super.onSaveInstanceState(outState);
+		 Log.d("PUKI","onSaveInstanceState");
+		 outState.putSerializable(GAME_DATA, gameData);
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO SAVE INSTANCE
+		super.onPause();
+		Log.d("PUKI","onStart");
+		
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO RESTORE GAME
+		super.onResume();
+		Log.d("PUKI","onResume");
 	}
 }

@@ -118,6 +118,15 @@ public class Hand implements Serializable{
 		return cards.length;
 	}
 	
+	public int getCardsCount(){
+		int count = 0;
+		for(int i = 0;i < cards.length;i++){
+			if(cards[i] != null) count++;
+		}
+		Log.i("HAND", "Hand size is: "+count);
+		return count;
+	}
+	
 	public int countSelectedCards(){
 		int c = 0;
 		for(int index = 0;index < cards.length;index++){
