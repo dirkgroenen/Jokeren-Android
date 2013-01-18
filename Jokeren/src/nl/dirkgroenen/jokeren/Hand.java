@@ -28,7 +28,6 @@ public class Hand implements Serializable{
 	}
 	
 	public int addCard(PlayingCard card){
-		Log.i("ADD", "Card ("+card.getPngName()+") given to "+playerName+" at position: "+firstFreeLocation);
 		lastShowedCard = firstFreeLocation;
 		cards[firstFreeLocation] = card;
 		return firstFreeLocation++;

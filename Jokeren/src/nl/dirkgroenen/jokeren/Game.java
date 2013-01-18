@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -29,12 +30,14 @@ public class Game extends Activity implements OnTouchListener{
 	private ArrayList<Hand> playersInOrder;
 	private LinearLayout llPlayGround,llPlayGroundRow1,llPlayGroundRow2,llCardDeck;
 	private ArrayList<PlayedSet> playedSets;
-
+	public static final String SAVE_FILENAME = "jokerensave.ser";
+	private SaveHandler savehandler;
+	
+	
 	public static enum STATES {
 		start, resume, end
 	};
 
-	private boolean firstRun;
 	public static final int START_CODE = 0;
 	public static final int RESUME_CODE = 1;
 	public static final String GAME_STATE = "STATE";
@@ -43,11 +46,15 @@ public class Game extends Activity implements OnTouchListener{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.d("PUKI","onCreate");
+		
+		savehandler = SaveHandler.getInstance(this);
+		gameData = savehandler.readLastState();
 
 		// Get passed gamedata from intent
 		if (getIntent().getExtras() != null) {
-			gameData = (GameData) getIntent().getExtras().getSerializable(GAME_DATA);
-			Log.i("CORE","Gamedata gets set with data received from mainscreen");
+			//gameData = (GameData) getIntent().getExtras().getSerializable(GAME_DATA);
+			//saveHandler = (SaveHandler)
 		} else {
 			Log.i("CORE", "Empty intent, not good!");
 		}
@@ -57,15 +64,15 @@ public class Game extends Activity implements OnTouchListener{
 		// Load which state was given by the mainscreen
 		switch ((STATES) getIntent().getExtras().get(GAME_STATE)) {
 		case start:
-			firstRun = true;
+			gameData.setFirstRun(true);
 			Log.i("ONCREATE", "Received state: start");
 			break;
 		case resume:
-			firstRun = false;
+			gameData.setFirstRun(false);
 			Log.i("ONCREATE", "Received state: resume");
 			break;
 		default:
-			firstRun = true;
+			gameData.setFirstRun(true);
 			Log.i("ONCREATE", "Received state: none");
 			break;
 		}
@@ -78,18 +85,15 @@ public class Game extends Activity implements OnTouchListener{
 		i.putExtras(b);
 		setResult(0, i);
 
-		// Init the game
-		init(firstRun);
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-
-		if (firstRun) {
-			init(false);
-			firstRun = false;
-		}
+		Log.d("PUKI","onStart");
+		Log.i("FIRSTRUN", "Firstrun = "+gameData.getFirstRun());
+		
+		init(gameData.getFirstRun());
 
 		// Init click listeners
 		llCardDeck.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +142,9 @@ public class Game extends Activity implements OnTouchListener{
 			@Override
 			public void onClick(View v) {
 				Log.i("CLICK","Play ground clicked");
+				if(gameData.getPlayerHand().countSelectedCards() == 0){
+					// Do nothing
+				}
 				if(gameData.getPlayerHand().countSelectedCards() < 3){
 					Toast.makeText(	getApplicationContext(),getResources().getString(R.string.emptyNewSetError),Toast.LENGTH_SHORT).show();
 				}
@@ -170,7 +177,7 @@ public class Game extends Activity implements OnTouchListener{
 	}
 
 	private void init(boolean first) {
-		initGraphics();
+		initGraphics(first);
 		Log.i("INIT", "Game init graphics");
 		if (first) {
 			Log.i("INIT", "Game init core");
@@ -178,7 +185,7 @@ public class Game extends Activity implements OnTouchListener{
 		}
 	}
 
-	private void initGraphics() {
+	private void initGraphics(boolean first) {
 		ivDeckOpen = (ImageView) findViewById(R.id.ivDeckOpen);
 		ivDeckClosed = (ImageView) findViewById(R.id.ivDeck);
 
@@ -209,6 +216,12 @@ public class Game extends Activity implements OnTouchListener{
 		
 		//Deck
 		llCardDeck = (LinearLayout) findViewById(R.id.llCardDeck);
+		
+		if(!first){
+			redrawHand();
+			redrawDeck();
+			redrawPlayGround();
+		}
 	}
 
 	private void initGameCore() {
@@ -354,7 +367,7 @@ public class Game extends Activity implements OnTouchListener{
 	// ///////////// ////////////////////// ////////////
 	// //////////// REDRAW METHODS /////////////////////
 	// /////////// //////////////////////// ////////////
-	private void redrawHand(){
+	private void redrawHand(){		
 		Log.i("REDRAW", "Redraw hand");
 		
 		Hand hand = gameData.getPlayerHand();
@@ -369,13 +382,12 @@ public class Game extends Activity implements OnTouchListener{
 				// Convert DP to XP				
 				int leftmargin = (image.getId() != R.id.ivcard0_1) ? -convertDpToXp(25) : 0;
 
-				// Make sure that the card is down again
+				// Make sure that the card is down or up again
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(image.getLayoutParams().width,	image.getLayoutParams().height, 1);
-				params.gravity = Gravity.BOTTOM;
+				params.gravity = (card.getSelected()) ? Gravity.TOP : Gravity.BOTTOM;
 				params.setMargins(leftmargin, 0, 0, 0);
 				image.setLayoutParams(params);
 				
-				card.setSelected(false);
 			} else {
 				// Hide because card is empty
 				playerCards[index].setVisibility(View.INVISIBLE);
@@ -387,6 +399,7 @@ public class Game extends Activity implements OnTouchListener{
 	}
 
 	private void redrawPlayGround(){
+		//TODO: Check on which playground row the sets need to be layed down
 		Log.i("REDRAW", "Redraw playground");
 		
 		orderPlayedSets();
@@ -429,7 +442,6 @@ public class Game extends Activity implements OnTouchListener{
 	}
 
 	protected void redrawDeck() {
-		// TODO
 		Log.i("REDRAW", "Redraw deck");
 		Deck deck = gameData.getDeck();
 		
@@ -468,18 +480,11 @@ public class Game extends Activity implements OnTouchListener{
 	/////////////// ///////////////// ////////////
 	
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		 super.onSaveInstanceState(outState);
-		 Log.d("PUKI","onSaveInstanceState");
-		 outState.putSerializable(GAME_DATA, gameData);
-	}
-
-	@Override
 	protected void onPause() {
 		// TODO SAVE INSTANCE
 		super.onPause();
-		Log.d("PUKI","onStart");
-		
+		Log.d("PUKI","onPause");
+		savehandler.save(gameData);
 	}
 
 	@Override
@@ -487,5 +492,31 @@ public class Game extends Activity implements OnTouchListener{
 		// TODO RESTORE GAME
 		super.onResume();
 		Log.d("PUKI","onResume");
+	}
+	
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
+		Log.d("PUKI","onRestart");
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		Log.d("PUKI","onStop");
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		Log.d("PUKI","onDestroy");
+		
+	}
+	@Override
+	public void onConfigurationChanged(Configuration newConfig){
+		super.onConfigurationChanged(newConfig);
 	}
 }
