@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -32,7 +34,9 @@ public class Game extends Activity implements OnTouchListener{
 	private ArrayList<PlayedSet> playedSets;
 	public static final String SAVE_FILENAME = "jokerensave.ser";
 	private SaveHandler savehandler;
-	
+	private Hand currentHand;
+	private int defaultStartingPlayer = 0;
+	private Builder dialog;
 	
 	public static enum STATES {
 		start, resume, end
@@ -84,7 +88,6 @@ public class Game extends Activity implements OnTouchListener{
 		Intent i = new Intent();
 		i.putExtras(b);
 		setResult(0, i);
-
 	}
 
 	@Override
@@ -174,6 +177,14 @@ public class Game extends Activity implements OnTouchListener{
 			
 			card.setOnTouchListener(this);
 		}
+		
+		gameData.getTurn().addOnTurnEndedListener(new Turn.OnTurnEndedListener<Hand>() {
+			@Override
+			public void onTurnEnded(Hand hand) {
+				turnEndedHandler(hand);
+			}
+		});
+
 	}
 
 	private void init(boolean first) {
@@ -230,13 +241,13 @@ public class Game extends Activity implements OnTouchListener{
 
 		// Create array with players and their hand
 		playersInOrder = new ArrayList<Hand>();
-		playerHand = new Hand(playerCards, "Player name");
+		playerHand = new PlayerHand(playerCards, "Player name");
 		playersInOrder.add(playerHand);
-		oppHand = new Hand(null, "Opponent");
+		oppHand = new OppHand(new GameStrategy(), null, "Opponent");
 		playersInOrder.add(oppHand);
 
 		// Push all data to gamedata class
-		gameData.init(playerHand, oppHand, playersInOrder, deck, playedSets);
+		gameData.init(playerHand, oppHand, playersInOrder, deck, playedSets, new Turn<Hand>(playersInOrder,defaultStartingPlayer));
 		gameData.setGameInProgress(true);
 
 		// Deal cards to players
@@ -314,46 +325,72 @@ public class Game extends Activity implements OnTouchListener{
 	
 	//Throw card to deck
 	private void throwCardToDeck(){
-		PlayingCard thrownCard = gameData.getPlayerHand().throwSelectedCardToDeck();
-		if(thrownCard != null){
-			gameData.getDeck().addThrownCardToDeck(thrownCard);
-			gameData.setPlayerCanThrow(false);
-			gameData.setGrabbedCard(false);
-			redrawHand();
-			redrawDeck();
-		}
-		else{
-			Toast.makeText(	getApplicationContext(),getResources().getString(R.string.throwOneCardError),Toast.LENGTH_SHORT).show();
+		currentHand = gameData.getTurn().peek();
+		
+		if(currentHand.isAwaitingInput()){
+			PlayingCard thrownCard = gameData.getPlayerHand().throwSelectedCardToDeck();
+			if(thrownCard != null){
+				gameData.getDeck().addThrownCardToDeck(thrownCard);
+				gameData.setPlayerCanThrow(false);
+				gameData.setGrabbedCard(false);
+				redrawHand();
+				redrawDeck();
+				gameData.getTurn().next();
+			}
+			else{
+				Toast.makeText(	getApplicationContext(),getResources().getString(R.string.throwOneCardError),Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 	
 	// Create new play set
 	private void createNewPlaySet(){
-		ArrayList<PlayingCard> setcards = gameData.getPlayerHand().dropSelectedCards();
-		PlayedSet newSet = new PlayedSet();
-		for(PlayingCard card : setcards){
-			newSet.addCardToSet(card);
+		currentHand = gameData.getTurn().peek();
+		
+		if(currentHand.isAwaitingInput()){
+			ArrayList<PlayingCard> setcards;
+			try {
+				setcards = gameData.getPlayerHand().dropSelectedCards();
+				
+				PlayedSet newSet = new PlayedSet();
+				for(PlayingCard card : setcards){
+					newSet.addCardToSet(card);
+				}
+				gameData.createNewPlaySet(newSet);
+				redrawHand();
+				redrawPlayGround();
+				
+			} catch (InvalidDropException e) {
+				// TODO SHOW DIALOG
+			}
+			
 		}
-		gameData.createNewPlaySet(newSet);
-		redrawHand();
-		redrawPlayGround();
 	}
 	
 	// Add cards to played set
 	protected void changePlayedSet(int set) {
-		if((gameData.getPlayerHand().getCardsCount()-gameData.getPlayerHand().countSelectedCards()) == 0){
-			Toast.makeText(	getApplicationContext(),getResources().getString(R.string.noCardsLeftError),Toast.LENGTH_SHORT).show();
-		}
-		else{
-			ArrayList<PlayingCard> setcards = gameData.getPlayerHand().dropSelectedCards();
-			ArrayList<PlayedSet> playedSets = gameData.getAllPlayedSets();
-			PlayedSet newSet = playedSets.get(set);
-			for(PlayingCard card : setcards){
-				newSet.addCardToSet(card);
+		currentHand = gameData.getTurn().peek();
+		
+		if(currentHand.isAwaitingInput()){
+			if((gameData.getPlayerHand().getCardsCount()-gameData.getPlayerHand().countSelectedCards()) == 0){
+				Toast.makeText(	getApplicationContext(),getResources().getString(R.string.noCardsLeftError),Toast.LENGTH_SHORT).show();
 			}
-			
-			redrawHand();
-			redrawPlayGround();
+			else{
+				ArrayList<PlayingCard> setcards;
+				try {					
+					ArrayList<PlayedSet> playedSets = gameData.getAllPlayedSets();
+					PlayedSet newSet = playedSets.get(set);
+					setcards = gameData.getPlayerHand().dropSelectedCardsToExisting(newSet);
+					for(PlayingCard card : setcards){
+						newSet.addCardToSet(card);
+					}
+					
+					redrawHand();
+					redrawPlayGround();
+				} catch (InvalidDropException e) {
+					// TODO SHOW DIALOG
+				}
+			}
 		}
 	}
 	
@@ -361,6 +398,22 @@ public class Game extends Activity implements OnTouchListener{
 		ArrayList<PlayedSet> playedSets = gameData.getAllPlayedSets();
 		for(PlayedSet set : playedSets){
 			Collections.sort(set.getAllCards());
+		}
+	}
+	
+	//TODO
+	protected void turnEndedHandler(final Hand hand) {
+		if(hand.isAwaitingInput()){
+			// This means the turn is for a human player, so do nothing.
+			Log.i("TURN", "The turn is for the human player: "+hand.getPlayerName());
+		}
+		else{
+			// This means the turn is for a AI. Decide!
+			Log.i("TURN", "The turn is for the AI player: "+hand.getPlayerName());
+			gameData.getTurn().next();
+			
+			// Update players hand size for human player
+			this.updateOppScore();
 		}
 	}
 	
@@ -395,7 +448,7 @@ public class Game extends Activity implements OnTouchListener{
 		}
 		
 		// Count the opponents cards and place in textview
-		tvOpp1.setText(getApplicationContext().getResources().getString(R.string.opp1)+": "+Integer.toString(gameData.getOppHand().getHandSize()));
+		tvOpp1.setText(getApplicationContext().getResources().getString(R.string.opp1)+": "+Integer.toString(gameData.getOppHand().getCardsCount()));
 	}
 
 	private void redrawPlayGround(){
@@ -518,5 +571,13 @@ public class Game extends Activity implements OnTouchListener{
 	@Override
 	public void onConfigurationChanged(Configuration newConfig){
 		super.onConfigurationChanged(newConfig);
+	}
+	
+	/////////// //////////// ///////////////
+	/////////// EDIT SCORE ////////////////
+	////////// /////////// ///////////////
+	
+	public void updateOppScore(){
+		tvOpp1.setText(getApplicationContext().getResources().getString(R.string.opp1)+": "+Integer.toString(gameData.getOppHand().getCardsCount()));
 	}
 }

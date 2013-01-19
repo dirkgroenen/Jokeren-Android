@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import android.util.Log;
 import android.widget.ImageView;
 
-public class Hand implements Serializable{
+public abstract class Hand implements Serializable{
 	
 	/**
 	 * 
@@ -16,6 +16,7 @@ public class Hand implements Serializable{
 	protected PlayingCard[] cards;
 	private int firstFreeLocation,lastShowedCard;
 	private String playerName;
+	protected GameStrategy strategy;
 
 	public Hand(ImageView[] playerCards, String name){
 		this.cards = new PlayingCard[14];
@@ -46,7 +47,17 @@ public class Hand implements Serializable{
 		return cards[index];
 	}
 	
-	public ArrayList<PlayingCard> dropSelectedCards(){
+	public ArrayList<PlayingCard> dropSelectedCards() throws InvalidDropException{
+		selectCardsToDrop();
+        return dropSelected();
+	}
+
+	public ArrayList<PlayingCard> dropSelectedCardsToExisting(PlayedSet set) throws InvalidDropException{
+		selectCardsToDropToExisting(set);
+        return dropSelected();
+	}
+	
+	private ArrayList<PlayingCard> dropSelected() {
 		ArrayList<PlayingCard> tempCards = new ArrayList<PlayingCard>();
 		for(int index = 0;index < cards.length;index++){
 			if(cards[index] != null && cards[index].getSelected() == true){
@@ -136,4 +147,13 @@ public class Hand implements Serializable{
 		Log.i("HAND",c+" Cards are selected");
 		return c;
 	}
+	
+	public String getPlayerName(){
+		return playerName;
+	}
+	
+	abstract public boolean isAwaitingInput();
+	
+	abstract public void selectCardsToDrop() throws InvalidDropException;
+	abstract public void selectCardsToDropToExisting(PlayedSet set) throws InvalidDropException;
 }

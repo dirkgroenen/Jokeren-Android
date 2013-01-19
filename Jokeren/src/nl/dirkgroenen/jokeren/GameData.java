@@ -15,6 +15,7 @@ public class GameData implements Serializable {
 	private Deck deck;
 	private boolean gameInProgress,grabbedCard,playerMustThrow,firstRun;
 	private ArrayList<PlayedSet> playedSets; 
+	private Turn<Hand> turn;
 	
 	private static GameData instance = new GameData();
 	
@@ -26,7 +27,7 @@ public class GameData implements Serializable {
 		return instance;
 	}
 	
-	public void init(Hand playerHand, Hand oppHand, ArrayList<Hand> playersInOrder, Deck deck, ArrayList<PlayedSet> playedSets) {
+	public void init(Hand playerHand, Hand oppHand, ArrayList<Hand> playersInOrder, Deck deck, ArrayList<PlayedSet> playedSets, Turn<Hand> turn) {
 		this.playerHand = playerHand;
 		this.playersInOrder = playersInOrder;
 		this.oppHand = oppHand;
@@ -35,6 +36,7 @@ public class GameData implements Serializable {
 		this.playerMustThrow = false;
 		this.playedSets = playedSets;
 		this.firstRun = false;
+		this.turn = turn;
 	}
 	
 	public Hand getPlayerHand(){
@@ -88,5 +90,8 @@ public class GameData implements Serializable {
 		this.firstRun = set;
 	}
 	
+	public Turn<Hand> getTurn(){
+		return turn;
+	}
 	
 }
