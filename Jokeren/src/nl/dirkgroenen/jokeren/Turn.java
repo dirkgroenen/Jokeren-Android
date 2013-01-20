@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Turn<T> implements Serializable{
+	
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 
-	public interface OnTurnEndedListener<T> {
-
+	public interface OnTurnEndedListener<T>{
 		void onTurnEnded(T currentPlayer);
-
 	}
 
 	private ArrayList<T> players;

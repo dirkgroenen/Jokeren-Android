@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -36,7 +34,6 @@ public class Game extends Activity implements OnTouchListener{
 	private SaveHandler savehandler;
 	private Hand currentHand;
 	private int defaultStartingPlayer = 0;
-	private Builder dialog;
 	
 	public static enum STATES {
 		start, resume, end
@@ -52,16 +49,9 @@ public class Game extends Activity implements OnTouchListener{
 		super.onCreate(savedInstanceState);
 		Log.d("PUKI","onCreate");
 		
+		// Get save game
 		savehandler = SaveHandler.getInstance(this);
 		gameData = savehandler.readLastState();
-
-		// Get passed gamedata from intent
-		if (getIntent().getExtras() != null) {
-			//gameData = (GameData) getIntent().getExtras().getSerializable(GAME_DATA);
-			//saveHandler = (SaveHandler)
-		} else {
-			Log.i("CORE", "Empty intent, not good!");
-		}
 
 		setContentView(R.layout.gamescreen);
 
@@ -184,7 +174,6 @@ public class Game extends Activity implements OnTouchListener{
 				turnEndedHandler(hand);
 			}
 		});
-
 	}
 
 	private void init(boolean first) {
@@ -362,6 +351,7 @@ public class Game extends Activity implements OnTouchListener{
 				
 			} catch (InvalidDropException e) {
 				// TODO SHOW DIALOG
+				Toast.makeText(	getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
 			}
 			
 		}
@@ -389,6 +379,7 @@ public class Game extends Activity implements OnTouchListener{
 					redrawPlayGround();
 				} catch (InvalidDropException e) {
 					// TODO SHOW DIALOG
+					Toast.makeText(	getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
 				}
 			}
 		}

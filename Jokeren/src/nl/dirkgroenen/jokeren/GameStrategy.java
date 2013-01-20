@@ -2,6 +2,7 @@ package nl.dirkgroenen.jokeren;
 
 import java.io.Serializable;
 
+
 public class GameStrategy implements Serializable{
 
 	/**

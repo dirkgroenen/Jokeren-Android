@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class GameData implements Serializable {
-
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -129686676812904301L;	
+	private static final long serialVersionUID = -3796450525724090900L;
 	
 	private Hand playerHand, oppHand;
 	private ArrayList<Hand> playersInOrder;

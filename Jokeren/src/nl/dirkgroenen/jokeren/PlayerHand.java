@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import android.util.Log;
 import android.widget.ImageView;
 
-public class PlayerHand extends Hand {
+public class PlayerHand extends Hand{
+	
 	/**
 	 * 
 	 */
