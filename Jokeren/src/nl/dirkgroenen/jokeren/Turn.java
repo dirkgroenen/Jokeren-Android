@@ -17,7 +17,7 @@ public class Turn<T> implements Serializable{
 	private ArrayList<T> players;
 	private int turnIndex;
 	private int rounds;
-	private ArrayList<OnTurnEndedListener<T>> turnEndListenerList;
+	private transient ArrayList<OnTurnEndedListener<T>> turnEndListenerList;
 
 	public Turn() {
 		throw new UnsupportedOperationException("cannot init without players");

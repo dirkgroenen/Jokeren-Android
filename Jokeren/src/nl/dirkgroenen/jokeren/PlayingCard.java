@@ -156,6 +156,6 @@ public class PlayingCard extends Activity implements Serializable,Comparable<Pla
 
 	@Override
 	public int compareTo(PlayingCard other) {
-		return (other==null? -1 : (other.getIntegerValue() == null ? 0 : other.getIntegerValue()) ) - (this.getIntegerValue()==null? 0: this.getIntegerValue());
+		return (this.getIntegerValue()==null? 0: this.getIntegerValue()) - (other==null? -1 : (other.getIntegerValue() == null ? 0 : other.getIntegerValue()) );
 	}
 }

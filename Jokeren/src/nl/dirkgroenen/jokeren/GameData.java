@@ -37,6 +37,12 @@ public class GameData implements Serializable {
 		this.playedSets = playedSets;
 		this.firstRun = false;
 		this.turn = turn;
+		
+		turn.addOnTurnEndedListener(new Turn.OnTurnEndedListener<Hand>() {
+			@Override
+			public void onTurnEnded(Hand currentPlayer) {
+			}
+		});
 	}
 	
 	public Hand getPlayerHand(){
