@@ -397,14 +397,12 @@ public class Game extends Activity implements OnTouchListener{
 		if(hand.isAwaitingInput()){
 			// This means the turn is for a human player, so do nothing.
 			Log.i("TURN", "The turn is for the human player: "+hand.getPlayerName());
+			return;
 		}
 		else{
 			// This means the turn is for a AI. Decide!
 			Log.i("TURN", "The turn is for the AI player: "+hand.getPlayerName());
 			gameData.getTurn().next();
-			
-			// Update players hand size for human player
-			this.updateOppScore();
 		}
 	}
 	
