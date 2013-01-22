@@ -16,6 +16,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ public class Game extends Activity implements OnTouchListener{
 	private Deck deck;
 	private GameData gameData;
 	Hand playerHand, oppHand;
+	private ProgressBar pbPoints;
 	private ImageView ivDeckClosed, ivDeckOpen, ivPlayerCard1, ivPlayerCard2,ivPlayerCard3, ivPlayerCard4, ivPlayerCard5, ivPlayerCard6,ivPlayerCard7, ivPlayerCard8, ivPlayerCard9, ivPlayerCard10,ivPlayerCard11, ivPlayerCard12, ivPlayerCard13, ivPlayerCard14;
 	private ImageView[] playerCards;
 	private TextView tvOpp1;
@@ -167,13 +169,6 @@ public class Game extends Activity implements OnTouchListener{
 			
 			card.setOnTouchListener(this);
 		}
-		
-		gameData.getTurn().addOnTurnEndedListener(new Turn.OnTurnEndedListener<Hand>() {
-			@Override
-			public void onTurnEnded(Hand hand) {
-				turnEndedHandler(hand);
-			}
-		});
 	}
 
 	private void init(boolean first) {
@@ -217,6 +212,9 @@ public class Game extends Activity implements OnTouchListener{
 		//Deck
 		llCardDeck = (LinearLayout) findViewById(R.id.llCardDeck);
 		
+		// Point progress bar
+		pbPoints = (ProgressBar) findViewById(R.id.pbPoints);
+		
 		if(!first){
 			redrawHand();
 			redrawDeck();
@@ -236,7 +234,7 @@ public class Game extends Activity implements OnTouchListener{
 		playersInOrder.add(oppHand);
 
 		// Push all data to gamedata class
-		gameData.init(playerHand, oppHand, playersInOrder, deck, playedSets, new Turn<Hand>(playersInOrder,defaultStartingPlayer));
+		gameData.init(playerHand, oppHand, playersInOrder, deck, playedSets, defaultStartingPlayer, new Turn(playersInOrder, defaultStartingPlayer));
 		gameData.setGameInProgress(true);
 
 		// Deal cards to players
@@ -314,7 +312,7 @@ public class Game extends Activity implements OnTouchListener{
 	
 	//Throw card to deck
 	private void throwCardToDeck(){
-		currentHand = gameData.getTurn().peek();
+		currentHand = gameData.getTurn();
 		
 		if(currentHand.isAwaitingInput()){
 			PlayingCard thrownCard = gameData.getPlayerHand().throwSelectedCardToDeck();
@@ -324,7 +322,7 @@ public class Game extends Activity implements OnTouchListener{
 				gameData.setGrabbedCard(false);
 				redrawHand();
 				redrawDeck();
-				gameData.getTurn().next();
+				this.turnEndedHandler();
 			}
 			else{
 				Toast.makeText(	getApplicationContext(),getResources().getString(R.string.throwOneCardError),Toast.LENGTH_SHORT).show();
@@ -334,20 +332,27 @@ public class Game extends Activity implements OnTouchListener{
 	
 	// Create new play set
 	private void createNewPlaySet(){
-		currentHand = gameData.getTurn().peek();
+		currentHand = gameData.getTurn();
 		
 		if(currentHand.isAwaitingInput()){
 			ArrayList<PlayingCard> setcards;
 			try {
 				setcards = gameData.getPlayerHand().dropSelectedCards();
 				
-				PlayedSet newSet = new PlayedSet();
+				PlayedSet newSet = new PlayedSet(gameData.getCurrentPlayer());
 				for(PlayingCard card : setcards){
 					newSet.addCardToSet(card);
 				}
 				gameData.createNewPlaySet(newSet);
 				redrawHand();
 				redrawPlayGround();
+				
+				if(currentHand.noplayedSets()){
+					pbPoints.setVisibility(View.VISIBLE);
+					if(updateProgressBar() >= 40){
+						currentHand.setNoplayedSets();
+					}
+				}
 				
 			} catch (InvalidDropException e) {
 				// TODO SHOW DIALOG
@@ -357,9 +362,30 @@ public class Game extends Activity implements OnTouchListener{
 		}
 	}
 	
+	private int updateProgressBar() {
+		int pbMax = pbPoints.getMax();
+		int cardPoints = 0;
+		
+		for(PlayedSet set : gameData.getAllPlayedSets()){
+			if(set.getOwner() == gameData.getCurrentPlayer()){
+				for(PlayingCard card : set.getAllCards()){
+					cardPoints += card.getPoints();
+				}
+			}
+		}
+		double tempProgress = (cardPoints/40);
+		
+		Log.i("PROGRESS", "Cardpoints are: "+cardPoints+". That means we are at "+tempProgress+" of the total points");
+		pbPoints.setProgress((int) Math.round(pbMax*tempProgress));
+		if(cardPoints > 40){
+			pbPoints.setVisibility(View.INVISIBLE);
+		}
+		return cardPoints;
+	}
+
 	// Add cards to played set
 	protected void changePlayedSet(int set) {
-		currentHand = gameData.getTurn().peek();
+		currentHand = gameData.getTurn();
 		
 		if(currentHand.isAwaitingInput()){
 			if((gameData.getPlayerHand().getCardsCount()-gameData.getPlayerHand().countSelectedCards()) == 0){
@@ -393,16 +419,18 @@ public class Game extends Activity implements OnTouchListener{
 	}
 	
 	//TODO
-	protected void turnEndedHandler(final Hand hand) {
-		if(hand.isAwaitingInput()){
+	protected void turnEndedHandler() {
+		Hand curHand = gameData.nextTurn();
+		
+		if(curHand.isAwaitingInput()){
 			// This means the turn is for a human player, so do nothing.
-			Log.i("TURN", "The turn is for the human player: "+hand.getPlayerName());
+			Log.i("TURN", "The turn is for the human player: "+curHand.getPlayerName());
 			return;
 		}
 		else{
 			// This means the turn is for a AI. Decide!
-			Log.i("TURN", "The turn is for the AI player: "+hand.getPlayerName());
-			gameData.getTurn().next();
+			Log.i("TURN", "The turn is for the AI player: "+curHand.getPlayerName());
+			turnEndedHandler();
 		}
 	}
 	

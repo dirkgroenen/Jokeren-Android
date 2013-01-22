@@ -16,6 +16,7 @@ public abstract class Hand implements Serializable{
 	protected PlayingCard[] cards;
 	private int firstFreeLocation,lastShowedCard;
 	private String playerName;
+	private boolean noPlayedSets = true;
 	protected GameStrategy strategy;
 
 	public Hand(ImageView[] playerCards, String name){
@@ -150,6 +151,14 @@ public abstract class Hand implements Serializable{
 	
 	public String getPlayerName(){
 		return playerName;
+	}
+	
+	public boolean noplayedSets(){
+		return noPlayedSets;
+	}
+	
+	public void setNoplayedSets(){
+		noPlayedSets = false;
 	}
 	
 	abstract public boolean isAwaitingInput();

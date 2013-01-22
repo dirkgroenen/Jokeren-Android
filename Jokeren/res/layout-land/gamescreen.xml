@@ -308,9 +308,26 @@
                     android:layout_alignParentTop="true"
                     android:orientation="horizontal" >
                 </LinearLayout>
+
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
+    
+    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true">
+         <ProgressBar
+             android:id="@+id/pbPoints"
+             style="?android:attr/progressBarStyleHorizontal"
+             android:visibility="invisible"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentLeft="true"
+             android:layout_alignParentTop="true" />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/llCardDeck"

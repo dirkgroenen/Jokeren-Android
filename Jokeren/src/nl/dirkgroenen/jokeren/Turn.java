@@ -3,55 +3,47 @@ package nl.dirkgroenen.jokeren;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Turn<T> implements Serializable{
-	
+import android.util.Log;
+
+public class Turn implements Serializable{
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	public interface OnTurnEndedListener<T> extends Serializable{
-		void onTurnEnded(T currentPlayer);
-	}
-
-	private ArrayList<T> players;
-	private int turnIndex;
-	private int rounds;
-	private ArrayList<OnTurnEndedListener<T>> turnEndListenerList;
-
-	public Turn() {
+	
+	private ArrayList<Hand> players;
+	private int currentPlayer;
+	private int turns = 0;
+	
+	public Turn(){
 		throw new UnsupportedOperationException("cannot init without players");
 	}
-
-	public Turn(ArrayList<T> players, int startingPlayerIndex) {
+	
+	public Turn(ArrayList<Hand> players, int currentPlayer){
 		this.players = players;
-		this.turnIndex = startingPlayerIndex;
-		this.rounds = 0;
-		turnEndListenerList = new ArrayList<OnTurnEndedListener<T>>();
+		this.currentPlayer = currentPlayer;
+		
+		Log.i("TURN", "This game will be played with "+players.size()+" players.");
+		Log.i("TURN", "This game will start with player: "+players.get(currentPlayer).getPlayerName());
 	}
-
-	public int getRounds() {
-		return rounds;
+	
+	public Hand nextTurn(){
+		turns++;
+		currentPlayer++;
+		currentPlayer = (currentPlayer == players.size()) ? 0 : currentPlayer ;
+		return players.get(currentPlayer);
 	}
-
-	public T next() {
-		turnIndex = (turnIndex + 1) % players.size();
-		if (turnIndex == 0) {
-			rounds++;
-		}
-		T retVal = players.get(turnIndex);
-		for (OnTurnEndedListener<T> l : turnEndListenerList) {
-			l.onTurnEnded(retVal);
-		}
-		return retVal;
+	
+	public Hand getTurn(){
+		return players.get(currentPlayer);
 	}
-
-	public T peek() {
-		return players.get(turnIndex);
+	
+	public int getTurnCount(){
+		return turns;
 	}
-
-	public void addOnTurnEndedListener(OnTurnEndedListener<T> l) {
-		this.turnEndListenerList.add(l);
-
+	
+	public int getCurrentPlayer(){
+		return currentPlayer;
 	}
 }

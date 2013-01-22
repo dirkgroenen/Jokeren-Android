@@ -14,8 +14,8 @@ public class GameData implements Serializable {
 	private ArrayList<Hand> playersInOrder;
 	private Deck deck;
 	private boolean gameInProgress,grabbedCard,playerMustThrow,firstRun;
-	private ArrayList<PlayedSet> playedSets; 
-	private Turn<Hand> turn;
+	private ArrayList<PlayedSet> playedSets;
+	private Turn turn;
 	
 	private static GameData instance = new GameData();
 	
@@ -27,7 +27,7 @@ public class GameData implements Serializable {
 		return instance;
 	}
 	
-	public void init(Hand playerHand, Hand oppHand, ArrayList<Hand> playersInOrder, Deck deck, ArrayList<PlayedSet> playedSets, Turn<Hand> turn) {
+	public void init(Hand playerHand, Hand oppHand, ArrayList<Hand> playersInOrder, Deck deck, ArrayList<PlayedSet> playedSets, int defaultStartingPlayer, Turn turn) {
 		this.playerHand = playerHand;
 		this.playersInOrder = playersInOrder;
 		this.oppHand = oppHand;
@@ -37,12 +37,6 @@ public class GameData implements Serializable {
 		this.playedSets = playedSets;
 		this.firstRun = false;
 		this.turn = turn;
-		
-		turn.addOnTurnEndedListener(new Turn.OnTurnEndedListener<Hand>() {
-			@Override
-			public void onTurnEnded(Hand currentPlayer) {
-			}
-		});
 	}
 	
 	public Hand getPlayerHand(){
@@ -96,8 +90,15 @@ public class GameData implements Serializable {
 		this.firstRun = set;
 	}
 	
-	public Turn<Hand> getTurn(){
-		return turn;
+	public Hand getTurn(){
+		return turn.getTurn();
 	}
 	
+	public Hand nextTurn(){
+		return turn.nextTurn();
+	}
+	
+	public int getCurrentPlayer(){
+		return turn.getCurrentPlayer();
+	}
 }

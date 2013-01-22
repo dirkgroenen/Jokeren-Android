@@ -80,24 +80,24 @@ public final class R {
         public static final int st=0x7f020042;
     }
     public static final class id {
-        public static final int bResumeGame=0x7f07003b;
-        public static final int bStartGame=0x7f07003a;
+        public static final int bResumeGame=0x7f07003c;
+        public static final int bStartGame=0x7f07003b;
         public static final int ivDeck=0x7f070003;
         public static final int ivDeckOpen=0x7f070002;
         public static final int ivcard0_1=0x7f070006;
-        public static final int ivcard0_10=0x7f070035;
-        public static final int ivcard0_11=0x7f070036;
-        public static final int ivcard0_12=0x7f070037;
-        public static final int ivcard0_13=0x7f070038;
-        public static final int ivcard0_14=0x7f070039;
+        public static final int ivcard0_10=0x7f070036;
+        public static final int ivcard0_11=0x7f070037;
+        public static final int ivcard0_12=0x7f070038;
+        public static final int ivcard0_13=0x7f070039;
+        public static final int ivcard0_14=0x7f07003a;
         public static final int ivcard0_2=0x7f070007;
         public static final int ivcard0_3=0x7f070008;
         public static final int ivcard0_4=0x7f070009;
         public static final int ivcard0_5=0x7f07000a;
         public static final int ivcard0_6=0x7f07000b;
         public static final int ivcard0_7=0x7f07000c;
-        public static final int ivcard0_8=0x7f070033;
-        public static final int ivcard0_9=0x7f070034;
+        public static final int ivcard0_8=0x7f070034;
+        public static final int ivcard0_9=0x7f070035;
         public static final int ivcard1_1=0x7f07001c;
         public static final int ivcard1_2=0x7f07001d;
         public static final int ivcard1_3=0x7f07001e;
@@ -139,7 +139,8 @@ public final class R {
         public static final int llplaygroundRow2=0x7f070014;
         public static final int lltopcards=0x7f07001a;
         public static final int lltopplayers=0x7f070000;
-        public static final int menu_settings=0x7f07003c;
+        public static final int menu_settings=0x7f07003d;
+        public static final int pbPoints=0x7f070033;
         public static final int tvOpp1=0x7f070001;
     }
     public static final class layout {

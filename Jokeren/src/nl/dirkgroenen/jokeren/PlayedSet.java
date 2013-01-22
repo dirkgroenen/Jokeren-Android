@@ -12,15 +12,17 @@ public class PlayedSet implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private ArrayList<PlayingCard> set;
+	private int owner;
 	
 	// You can use this class to create a new set, or view a already existing set.
 	public PlayedSet(){
-		set = new ArrayList<PlayingCard>(13);
-		Log.i("SET","New set created");
+		throw new UnsupportedOperationException("cannot init without set owner");
 	}
 	
-	public PlayedSet(ArrayList<PlayingCard> set){
-		this.set = set;
+	public PlayedSet(int owner){
+		this.owner = owner;
+		set = new ArrayList<PlayingCard>(13);
+		Log.i("SET","New set created");
 	}
 	
 	// Add a new card to the set
@@ -41,5 +43,9 @@ public class PlayedSet implements Serializable{
 	// Get all cards in set
 	public ArrayList<PlayingCard> getAllCards(){
 		return set;
+	}
+	
+	public int getOwner(){
+		return owner;
 	}
 }
