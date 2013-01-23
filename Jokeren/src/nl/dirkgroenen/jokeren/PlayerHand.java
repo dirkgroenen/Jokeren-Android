@@ -127,7 +127,7 @@ public class PlayerHand extends Hand{
 			
 			// 4 check series
 			// 4.1 not enough cards
-			if (cardsToCheck.size() < 3 && jokerCount == 0) { // todo:change to cardstochek.size()+jokercount<3
+			if (cardsToCheck.size() < 3 && jokerCount == 0) {
 				// Reject
 				throw new InvalidDropException(
 						"(YE002)Cards have same suit, but are not enough to complete a series! "
@@ -137,10 +137,8 @@ public class PlayerHand extends Hand{
 			// 4.2 ace removal
 
 			for (PlayingCard card : cardsToCheck) {
-				if (card.getIntegerValue() == Character.digit(PlayingCard.ACE,
-						10)) {
+				if (card.getIntegerValue() == Character.digit(PlayingCard.ACE,10)) {
 					aceInCards = card;
-
 				}
 			}
 			if (aceInCards != null) {
@@ -150,9 +148,7 @@ public class PlayerHand extends Hand{
 			Collections.sort(cardsToCheck);
 			// 4.4 - check descending series
 			for (int i = 0; i < cardsToCheck.size() - 1; i++) {
-				int differenceBetweenThisAndNextCardVal = cardsToCheck.get(i)
-						.getIntegerValue()
-						- cardsToCheck.get(i + 1).getIntegerValue();
+				int differenceBetweenThisAndNextCardVal = cardsToCheck.get(i).getIntegerValue()	- cardsToCheck.get(i + 1).getIntegerValue();
 				// 4.4.1
 				if (differenceBetweenThisAndNextCardVal != 1) {
 					// 4.4.1.2

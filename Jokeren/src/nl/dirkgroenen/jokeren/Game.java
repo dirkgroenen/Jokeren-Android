@@ -315,17 +315,32 @@ public class Game extends Activity implements OnTouchListener{
 		currentHand = gameData.getTurn();
 		
 		if(currentHand.isAwaitingInput()){
-			PlayingCard thrownCard = gameData.getPlayerHand().throwSelectedCardToDeck();
-			if(thrownCard != null){
-				gameData.getDeck().addThrownCardToDeck(thrownCard);
-				gameData.setPlayerCanThrow(false);
-				gameData.setGrabbedCard(false);
+			if(updateProgressBar() <= 40 && updateProgressBar() != 0 && gameData.getPlayerHand().noplayedSets() == true){
+				// Remove all played sets and give the cards back to the player.
+				ArrayList<PlayedSet> setsback = gameData.removePlayedSets(gameData.getCurrentPlayer());
+				for(PlayedSet set : setsback){
+					for(PlayingCard card : set.getAllCards()){
+						card.setSelected(false);
+						gameData.getPlayerHand().addCard(card);
+					}
+				}
+				redrawPlayGround();
 				redrawHand();
-				redrawDeck();
-				this.turnEndedHandler();
+				Toast.makeText(	getApplicationContext(),getResources().getString(R.string.notEnoughPoints),Toast.LENGTH_LONG).show();
 			}
 			else{
-				Toast.makeText(	getApplicationContext(),getResources().getString(R.string.throwOneCardError),Toast.LENGTH_SHORT).show();
+				PlayingCard thrownCard = gameData.getPlayerHand().throwSelectedCardToDeck();
+				if(thrownCard != null){
+					gameData.getDeck().addThrownCardToDeck(thrownCard);
+					gameData.setPlayerCanThrow(false);
+					gameData.setGrabbedCard(false);
+					redrawHand();
+					redrawDeck();
+					this.turnEndedHandler();	
+				}
+				else{
+					Toast.makeText(	getApplicationContext(),getResources().getString(R.string.throwOneCardError),Toast.LENGTH_SHORT).show();
+				}
 			}
 		}
 	}
@@ -349,9 +364,7 @@ public class Game extends Activity implements OnTouchListener{
 				
 				if(currentHand.noplayedSets()){
 					pbPoints.setVisibility(View.VISIBLE);
-					if(updateProgressBar() >= 40){
-						currentHand.setNoplayedSets();
-					}
+					updateProgressBar();
 				}
 				
 			} catch (InvalidDropException e) {
@@ -373,7 +386,8 @@ public class Game extends Activity implements OnTouchListener{
 				}
 			}
 		}
-		double tempProgress = (cardPoints/40);
+
+		double tempProgress = ((double)cardPoints/40);
 		
 		Log.i("PROGRESS", "Cardpoints are: "+cardPoints+". That means we are at "+tempProgress+" of the total points");
 		pbPoints.setProgress((int) Math.round(pbMax*tempProgress));
@@ -403,6 +417,11 @@ public class Game extends Activity implements OnTouchListener{
 					
 					redrawHand();
 					redrawPlayGround();
+					
+					if(currentHand.noplayedSets()){
+						pbPoints.setVisibility(View.VISIBLE);
+						updateProgressBar();
+					}
 				} catch (InvalidDropException e) {
 					// TODO SHOW DIALOG
 					Toast.makeText(	getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
@@ -412,9 +431,18 @@ public class Game extends Activity implements OnTouchListener{
 	}
 	
 	private void orderPlayedSets() {
+		int joker = 0;
 		ArrayList<PlayedSet> playedSets = gameData.getAllPlayedSets();
 		for(PlayedSet set : playedSets){
+			for(PlayingCard card: set.getAllCards()){
+				if(card.getIntegerValue() == null){
+					joker++;
+					Log.i("REDRAW", "Joker found in set");
+				}
+				
+			}
 			Collections.sort(set.getAllCards());
+			// TODO When collection contains a joker we have to place that joker in the right position!
 		}
 	}
 	

@@ -101,4 +101,16 @@ public class GameData implements Serializable {
 	public int getCurrentPlayer(){
 		return turn.getCurrentPlayer();
 	}
+	
+	public ArrayList<PlayedSet> removePlayedSets(int player){
+		ArrayList<PlayedSet> temp = new ArrayList<PlayedSet>();
+		for(int i = 0; i < playedSets.size();i++){
+			if(playedSets.get(i).getOwner() == player){
+				temp.add(playedSets.get(i));
+				playedSets.remove(i);
+			}
+		}
+		
+		return temp;
+	}
 }
