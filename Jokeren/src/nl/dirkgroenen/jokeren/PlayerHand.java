@@ -35,9 +35,8 @@ public class PlayerHand extends Hand{
 	}
 
 	private void verifyCardsToDrop(PlayedSet set) throws InvalidDropException {
-		// TODO CHECK FOR DOUBLE SUITS
 		
-		
+		// THANKS: http://code.google.com/p/bestcardgameever-android/
 		// The algorithm for dropping cards (This only checks if it is a legal
 		// drop
 		// Verify algorithm:

@@ -18,6 +18,7 @@ public abstract class Hand implements Serializable{
 	private String playerName;
 	private boolean noPlayedSets = true;
 	protected GameStrategy strategy;
+	private int prevswap1, prevswap2;
 
 	public Hand(ImageView[] playerCards, String name){
 		this.cards = new PlayingCard[14];
@@ -159,6 +160,18 @@ public abstract class Hand implements Serializable{
 	
 	public void setNoplayedSets(){
 		noPlayedSets = false;
+	}
+	
+	public void swapPlayerCards(int card1, int card2){
+		if(prevswap1 != card1 || prevswap2 != card2){
+			PlayingCard temp = cards[card1];
+			cards[card1] = cards[card2];
+			cards[card2] = temp;
+			Log.i("SWAP", "Succesfully swapped card "+card1+" and "+card2);
+			
+			prevswap1 = card1;
+			prevswap2 = card2;
+		}
 	}
 	
 	abstract public boolean isAwaitingInput();

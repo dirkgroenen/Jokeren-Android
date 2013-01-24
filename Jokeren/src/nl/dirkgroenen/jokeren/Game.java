@@ -36,6 +36,8 @@ public class Game extends Activity implements OnTouchListener{
 	private SaveHandler savehandler;
 	private Hand currentHand;
 	private int defaultStartingPlayer = 0;
+	private int grabbedCard = 0;
+	private boolean justSwapped = false;
 	
 	public static enum STATES {
 		start, resume, end
@@ -140,7 +142,7 @@ public class Game extends Activity implements OnTouchListener{
 				if(gameData.getPlayerHand().countSelectedCards() == 0){
 					// Do nothing
 				}
-				if(gameData.getPlayerHand().countSelectedCards() < 3){
+				if(gameData.getPlayerHand().countSelectedCards() < 3 && gameData.getPlayerHand().countSelectedCards() != 0){
 					Toast.makeText(	getApplicationContext(),getResources().getString(R.string.emptyNewSetError),Toast.LENGTH_SHORT).show();
 				}
 				else if(!gameData.getGrabbedCard()){
@@ -263,20 +265,25 @@ public class Game extends Activity implements OnTouchListener{
 
 	// Mark card selected/unselected when user click it
 	private void markPlayerCardSelected(int cardIndex) {
-		Log.i("MARK", "Card "+cardIndex+" gets marked");
-		
-		ImageView card = playerCards[cardIndex];
-		boolean selected = gameData.getPlayerHand().isCardSelected(cardIndex);
-
-		// Convert DP to PX for margin
-		int leftmargin = (card.getId() != R.id.ivcard0_1) ? -convertDpToXp(25) : 0;
-
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(card.getLayoutParams().width, card.getLayoutParams().height, 1);
-		params.gravity = !selected ? Gravity.TOP : Gravity.BOTTOM;
-		params.setMargins(leftmargin, 0, 0, 0);
-		card.setLayoutParams(params);
-
-		gameData.getPlayerHand().changeCardSelectedState(cardIndex);
+		if(!justSwapped){
+			Log.i("MARK", "Card "+cardIndex+" gets marked");
+			
+			ImageView card = playerCards[cardIndex];
+			boolean selected = gameData.getPlayerHand().isCardSelected(cardIndex);
+	
+			// Convert DP to PX for margin
+			int leftmargin = (card.getId() != R.id.ivcard0_1) ? -convertDpToXp(25) : 0;
+	
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(card.getLayoutParams().width, card.getLayoutParams().height, 1);
+			params.gravity = !selected ? Gravity.TOP : Gravity.BOTTOM;
+			params.setMargins(leftmargin, 0, 0, 0);
+			card.setLayoutParams(params);
+	
+			gameData.getPlayerHand().changeCardSelectedState(cardIndex);
+		}
+		else{
+			justSwapped = false;
+		}
 	}
 
 	// Grab a card from the open stack
@@ -324,9 +331,13 @@ public class Game extends Activity implements OnTouchListener{
 						gameData.getPlayerHand().addCard(card);
 					}
 				}
+				// Redraw everything and toast a message
 				redrawPlayGround();
 				redrawHand();
 				Toast.makeText(	getApplicationContext(),getResources().getString(R.string.notEnoughPoints),Toast.LENGTH_LONG).show();
+				
+				// Make sure the progressbar is hidden again
+				pbPoints.setVisibility(View.INVISIBLE);
 			}
 			else{
 				PlayingCard thrownCard = gameData.getPlayerHand().throwSelectedCardToDeck();
@@ -347,6 +358,7 @@ public class Game extends Activity implements OnTouchListener{
 	
 	// Create new play set
 	private void createNewPlaySet(){
+		//TODO: Check where the joker needs to be placed
 		currentHand = gameData.getTurn();
 		
 		if(currentHand.isAwaitingInput()){
@@ -368,37 +380,16 @@ public class Game extends Activity implements OnTouchListener{
 				}
 				
 			} catch (InvalidDropException e) {
-				// TODO SHOW DIALOG
 				Toast.makeText(	getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
 			}
 			
 		}
 	}
-	
-	private int updateProgressBar() {
-		int pbMax = pbPoints.getMax();
-		int cardPoints = 0;
-		
-		for(PlayedSet set : gameData.getAllPlayedSets()){
-			if(set.getOwner() == gameData.getCurrentPlayer()){
-				for(PlayingCard card : set.getAllCards()){
-					cardPoints += card.getPoints();
-				}
-			}
-		}
-
-		double tempProgress = ((double)cardPoints/40);
-		
-		Log.i("PROGRESS", "Cardpoints are: "+cardPoints+". That means we are at "+tempProgress+" of the total points");
-		pbPoints.setProgress((int) Math.round(pbMax*tempProgress));
-		if(cardPoints > 40){
-			pbPoints.setVisibility(View.INVISIBLE);
-		}
-		return cardPoints;
-	}
 
 	// Add cards to played set
 	protected void changePlayedSet(int set) {
+		//TODO: Check where the joker needs to be placed
+		//TODO: Make it possible to change a joker with own cards
 		currentHand = gameData.getTurn();
 		
 		if(currentHand.isAwaitingInput()){
@@ -423,12 +414,35 @@ public class Game extends Activity implements OnTouchListener{
 						updateProgressBar();
 					}
 				} catch (InvalidDropException e) {
-					// TODO SHOW DIALOG
 					Toast.makeText(	getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
 				}
 			}
 		}
 	}
+	
+	
+	private int updateProgressBar() {
+		int pbMax = pbPoints.getMax();
+		int cardPoints = 0;
+		
+		for(PlayedSet set : gameData.getAllPlayedSets()){
+			if(set.getOwner() == gameData.getCurrentPlayer()){
+				for(PlayingCard card : set.getAllCards()){
+					cardPoints += card.getPoints();
+				}
+			}
+		}
+
+		double tempProgress = ((double)cardPoints/40);
+		
+		Log.i("PROGRESS", "Cardpoints are: "+cardPoints+". That means we are at "+tempProgress+" of the total points");
+		pbPoints.setProgress((int) Math.round(pbMax*tempProgress));
+		if(cardPoints > 40){
+			pbPoints.setVisibility(View.INVISIBLE);
+		}
+		return cardPoints;
+	}
+
 	
 	private void orderPlayedSets() {
 		int joker = 0;
@@ -446,8 +460,10 @@ public class Game extends Activity implements OnTouchListener{
 		}
 	}
 	
-	//TODO
 	protected void turnEndedHandler() {
+		// Make sure that the points bar is invisible
+		pbPoints.setVisibility(View.INVISIBLE);
+		
 		Hand curHand = gameData.nextTurn();
 		
 		if(curHand.isAwaitingInput()){
@@ -558,15 +574,31 @@ public class Game extends Activity implements OnTouchListener{
 	
 	@Override
 	public boolean onTouch(View view, MotionEvent event) {
-		// TODO TOUCH drag and drop for cards
 		int eventAction = event.getAction();
 		
 		switch(eventAction){
-		case MotionEvent.ACTION_DOWN: 
+		case MotionEvent.ACTION_DOWN:
+			// Check which card is selected
+			for(int i = 0; i < playerCards.length;i++){
+				if(view.getId() == playerCards[i].getId()){
+					grabbedCard = i;
+				}
+			}
+						
 			break;
 		case MotionEvent.ACTION_MOVE:
+			for(int i = 0; i < playerCards.length;i++){
+				if((event.getRawX() > playerCards[i].getLeft() && event.getRawX() < playerCards[i].getRight()-convertDpToXp(25))){
+					if(grabbedCard != i){
+						gameData.getPlayerHand().swapPlayerCards(grabbedCard, i);
+						grabbedCard = i;
+						justSwapped = true;
+						redrawHand();
+					}
+				}
+			}
 			break;
-		case MotionEvent.ACTION_UP: 
+		case MotionEvent.ACTION_UP:
 			break;
 		}
 		
@@ -579,7 +611,6 @@ public class Game extends Activity implements OnTouchListener{
 	
 	@Override
 	protected void onPause() {
-		// TODO SAVE INSTANCE
 		super.onPause();
 		Log.d("PUKI","onPause");
 		savehandler.save(gameData);
@@ -587,28 +618,24 @@ public class Game extends Activity implements OnTouchListener{
 
 	@Override
 	protected void onResume() {
-		// TODO RESTORE GAME
 		super.onResume();
 		Log.d("PUKI","onResume");
 	}
 	
 	@Override
 	protected void onRestart() {
-		// TODO Auto-generated method stub
 		super.onRestart();
 		Log.d("PUKI","onRestart");
 	}
 
 	@Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
 		Log.d("PUKI","onStop");
 	}
 	
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 		Log.d("PUKI","onDestroy");
 		
