@@ -291,6 +291,7 @@ public class Game extends Activity implements OnTouchListener{
 		ivPlayerCard14.setVisibility(View.VISIBLE);
 		gameData.setGrabbedCard(true);
 		gameData.setPlayerCanThrow(true);
+		gameData.getPlayerHand().compactHand();
 
 		PlayingCard card = gameData.getDeck().getTopThrownCard();
 
@@ -310,6 +311,7 @@ public class Game extends Activity implements OnTouchListener{
 		ivPlayerCard14.setVisibility(View.VISIBLE);
 		gameData.setGrabbedCard(true);
 		gameData.setPlayerCanThrow(true);
+		gameData.getPlayerHand().compactHand();
 
 		PlayingCard card = gameData.getDeck().getNextCard();
 
@@ -360,29 +362,26 @@ public class Game extends Activity implements OnTouchListener{
 	private void createNewPlaySet(){
 		//TODO: Check where the joker needs to be placed
 		currentHand = gameData.getTurn();
-		
-		if(currentHand.isAwaitingInput()){
-			ArrayList<PlayingCard> setcards;
-			try {
-				setcards = gameData.getPlayerHand().dropSelectedCards();
-				
-				PlayedSet newSet = new PlayedSet(gameData.getCurrentPlayer());
-				for(PlayingCard card : setcards){
-					newSet.addCardToSet(card);
-				}
-				gameData.createNewPlaySet(newSet);
-				redrawHand();
-				redrawPlayGround();
-				
-				if(currentHand.noplayedSets()){
-					pbPoints.setVisibility(View.VISIBLE);
-					updateProgressBar();
-				}
-				
-			} catch (InvalidDropException e) {
-				Toast.makeText(	getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+
+		ArrayList<PlayingCard> setcards;
+		try {
+			setcards = currentHand.dropSelectedCards();
+			
+			PlayedSet newSet = new PlayedSet(gameData.getCurrentPlayer());
+			for(PlayingCard card : setcards){
+				newSet.addCardToSet(card);
+			}
+			gameData.createNewPlaySet(newSet);
+			redrawHand();
+			redrawPlayGround();
+			
+			if(currentHand.noplayedSets()){
+				pbPoints.setVisibility(View.VISIBLE);
+				updateProgressBar();
 			}
 			
+		} catch (InvalidDropException e) {
+			Toast.makeText(	getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -429,6 +428,7 @@ public class Game extends Activity implements OnTouchListener{
 			if(set.getOwner() == gameData.getCurrentPlayer()){
 				for(PlayingCard card : set.getAllCards()){
 					cardPoints += card.getPoints();
+					Log.i("POINTS", "extra points: "+card.getPoints());
 				}
 			}
 		}
@@ -474,6 +474,9 @@ public class Game extends Activity implements OnTouchListener{
 		else{
 			// This means the turn is for a AI. Decide!
 			Log.i("TURN", "The turn is for the AI player: "+curHand.getPlayerName());
+			gameData.getOppHand().getCardByPosition(0).setSelected(true);
+			createNewPlaySet();
+			
 			turnEndedHandler();
 		}
 	}
@@ -545,13 +548,24 @@ public class Game extends Activity implements OnTouchListener{
 				image.setImageResource(playedSets.get(k).getAllCards().get(i).getImageResourceId());
 				ll.addView(image);
 			}
-			llPlayGroundRow1.addView(ll);
+			
+			if(gameData.getCurrentPlayer() == 0){
+				llPlayGroundRow1.addView(ll);
+				Log.i("SET", "Set is placed on row 1, it belongs to: "+gameData.getCurrentPlayer());
+			}
+			else{
+				llPlayGroundRow2.addView(ll);
+				Log.i("SET", "Set is placed on row 2, it belongs to: "+gameData.getCurrentPlayer());
+			}
+			
 			ll.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					changePlayedSet(currentLL);
 				}
 			});
+
+			//ll.setOnTouchListener(new PlaySetTouchListener());
 		}
 	}
 
@@ -592,7 +606,7 @@ public class Game extends Activity implements OnTouchListener{
 					if(grabbedCard != i){
 						gameData.getPlayerHand().swapPlayerCards(grabbedCard, i);
 						grabbedCard = i;
-						justSwapped = true;
+						//justSwapped = true;
 						redrawHand();
 					}
 				}
@@ -651,5 +665,27 @@ public class Game extends Activity implements OnTouchListener{
 	
 	public void updateOppScore(){
 		tvOpp1.setText(getApplicationContext().getResources().getString(R.string.opp1)+": "+Integer.toString(gameData.getOppHand().getCardsCount()));
+	}
+	
+	
+	// TODO Touch listener for played sets. This touchlistener can be used to remove the played set back to your hand
+	private class PlaySetTouchListener implements OnTouchListener {
+
+		@Override
+		public boolean onTouch(View view, MotionEvent event) {
+			int eventAction = event.getAction();
+			
+			switch(eventAction){
+				case MotionEvent.ACTION_DOWN:
+					break;
+				case MotionEvent.ACTION_MOVE:
+					break;
+				case MotionEvent.ACTION_UP:
+					break;
+				}
+			
+			return false;
+		}
+
 	}
 }

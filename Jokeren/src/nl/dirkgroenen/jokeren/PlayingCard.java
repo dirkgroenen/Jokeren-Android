@@ -112,6 +112,7 @@ public class PlayingCard extends Activity implements Serializable,Comparable<Pla
 		case KING:
 		case QUEEN:
 		case JACK:
+		case TEN:
 		case ACE_AS_FOURTEEN:
 			retVal = 10;
 			break;

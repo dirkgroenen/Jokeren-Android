@@ -100,7 +100,7 @@ public abstract class Hand implements Serializable{
 		}
 	}
 	
-	private void compactHand() {
+	public void compactHand() {
 		PlayingCard[] compactedArr = new PlayingCard[14];
         int idxInCompactedArr=0;
         for (int idxInCards = 0; idxInCards < cards.length; idxInCards++) {
